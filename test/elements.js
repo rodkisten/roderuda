@@ -1,8 +1,8 @@
 describe('elements', function () {
-  let tool = eruda.get('elements')
+  let tool = roderuda.get('elements')
 
   beforeEach(function () {
-    eruda.show('elements')
+    roderuda.show('elements')
   })
 
   describe('api', function () {

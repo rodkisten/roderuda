@@ -1,3 +1,3 @@
-eruda.init({
+roderuda.init({
   useShadowDom: false,
 })

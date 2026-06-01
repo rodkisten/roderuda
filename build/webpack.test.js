@@ -1,38 +1,11 @@
-const autoprefixer = require('autoprefixer')
-const prefixer = require('postcss-prefixer')
-const clean = require('postcss-clean')
+// Minimal webpack config used only for karma test bundling.
+// The main build uses tsdown instead.
+const path = require('path')
 const webpack = require('webpack')
 const pkg = require('../package.json')
-const path = require('path')
-const ESLintPlugin = require('eslint-webpack-plugin')
-
-process.traceDeprecation = true
-
-const banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
-
-const postcssLoader = {
-  loader: 'postcss-loader',
-  options: {
-    plugins: [
-      prefixer({
-        prefix: '_',
-        ignore: [/luna-*/],
-      }),
-      autoprefixer,
-      clean(),
-    ],
-  },
-}
-
-const rawLoader = {
-  loader: 'raw-loader',
-  options: {
-    esModule: false,
-  },
-}
 
 module.exports = {
-  entry: './src/index',
+  mode: 'development',
   resolve: {
     symlinks: false,
     alias: {
@@ -40,16 +13,8 @@ module.exports = {
       micromark: path.resolve(__dirname, '../src/lib/micromark.js'),
     },
   },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, '../test'),
-    },
-    port: 8080,
-  },
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: '/assets/',
-    library: 'eruda',
+    library: 'roderuda',
     libraryTarget: 'umd',
   },
   module: {
@@ -86,27 +51,54 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'css-loader',
-          postcssLoader,
+          {
+            loader: 'css-loader',
+            options: { esModule: false },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [
+                require('postcss-prefixer')({ prefix: '_', ignore: [/luna-.*/] }),
+                require('autoprefixer'),
+                require('postcss-clean')(),
+              ],
+            },
+          },
           { loader: 'sass-loader', options: { api: 'modern' } },
         ],
       },
       {
         test: /\.css$/,
         exclude: /luna-dom-highlighter/,
-        use: ['css-loader', postcssLoader],
+        use: [
+          {
+            loader: 'css-loader',
+            options: { esModule: false },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [
+                require('postcss-prefixer')({ prefix: '_', ignore: [/luna-.*/] }),
+                require('autoprefixer'),
+                require('postcss-clean')(),
+              ],
+            },
+          },
+        ],
       },
       {
         test: /luna-dom-highlighter\.css$/,
-        use: [rawLoader],
+        use: [{ loader: 'raw-loader', options: { esModule: false } }],
       },
     ],
   },
   plugins: [
-    new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       VERSION: '"' + pkg.version + '"',
+      ENV: '"development"',
     }),
-    new ESLintPlugin(),
   ],
+  devtool: 'source-map',
 }

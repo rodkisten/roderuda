@@ -1,9 +1,9 @@
 describe('sources', function () {
-  let tool = eruda.get('sources')
-  let $tool = $('.eruda-sources')
+  let tool = roderuda.get('sources')
+  let $tool = $('.roderuda-sources')
 
   beforeEach(function () {
-    eruda.show('sources')
+    roderuda.show('sources')
   })
 
   it('raw', function () {

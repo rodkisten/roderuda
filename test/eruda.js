@@ -1,30 +1,30 @@
 describe('devTools', function () {
   describe('init', function () {
     it('destroy', function () {
-      eruda.destroy()
+      roderuda.destroy()
 
-      expect($('#eruda')).toHaveLength(0)
+      expect($('#roderuda')).toHaveLength(0)
     })
 
     it('init', function () {
       let container = document.createElement('div')
-      container.id = 'eruda'
+      container.id = 'roderuda'
       document.body.appendChild(container)
 
-      eruda.init({
+      roderuda.init({
         container: container,
         tool: [],
         useShadowDom: false,
       })
 
-      let $eruda = $('#eruda')
-      expect($eruda.find('.eruda-dev-tools')).toHaveLength(1)
+      let $roderuda = $('#roderuda')
+      expect($roderuda.find('.roderuda-dev-tools')).toHaveLength(1)
     })
   })
 
   describe('tool', function () {
     it('add', function () {
-      eruda.add({
+      roderuda.add({
         name: 'test',
         init: function ($el) {
           this._$el = $el
@@ -32,32 +32,32 @@ describe('devTools', function () {
         },
       })
 
-      expect($('.eruda-test')).toContainText('Test Plugin')
+      expect($('.roderuda-test')).toContainText('Test Plugin')
     })
 
     it('show', function () {
-      let $tool = $('.eruda-test')
+      let $tool = $('.roderuda-test')
       expect($tool).toBeHidden()
-      eruda.show('test')
+      roderuda.show('test')
       expect($tool).toHaveCss({ display: 'block' })
     })
 
     it('remove', function () {
-      eruda.remove('test')
-      expect($('.eruda-test')).toHaveLength(0)
+      roderuda.remove('test')
+      expect($('.roderuda-test')).toHaveLength(0)
     })
   })
 
   describe('display', function () {
     it('show', function () {
-      eruda.show()
-      expect($('.eruda-dev-tools')).toHaveCss({ display: 'block' })
+      roderuda.show()
+      expect($('.roderuda-dev-tools')).toHaveCss({ display: 'block' })
     })
 
     it('hide', function (done) {
-      eruda.hide()
+      roderuda.hide()
       setTimeout(function () {
-        expect($('.eruda-dev-tools')).toBeHidden()
+        expect($('.roderuda-dev-tools')).toBeHidden()
         done()
       }, 500)
     })
@@ -65,8 +65,8 @@ describe('devTools', function () {
 
   describe('scale', function () {
     it('get', function () {
-      eruda.scale(1)
-      expect(eruda.scale()).toBe(1)
+      roderuda.scale(1)
+      expect(roderuda.scale()).toBe(1)
     })
   })
 })

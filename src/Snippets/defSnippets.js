@@ -167,7 +167,7 @@ function search(text) {
   traverse(root, (node) => {
     const $node = $(node)
 
-    if (!$node.hasClass('eruda-search-highlight-block')) return
+    if (!$node.hasClass('roderuda-search-highlight-block')) return
 
     return document.createTextNode($node.text())
   })
@@ -178,14 +178,14 @@ function search(text) {
     let val = node.nodeValue
     val = val.replace(
       regText,
-      (match) => `<span class="eruda-keyword">${match}</span>`
+      (match) => `<span class="roderuda-keyword">${match}</span>`
     )
     if (val === node.nodeValue) return
 
     const $ret = $(document.createElement('div'))
 
     $ret.html(val)
-    $ret.addClass('eruda-search-highlight-block')
+    $ret.addClass('roderuda-search-highlight-block')
 
     return $ret.get(0)
   })

@@ -1,5 +1,3 @@
-const eruda = require('./eruda').default
-module.exports = eruda
-module.exports.default = eruda
+import roderuda from './roderuda'
 
-//# sourceMappingURL=index.js.map
+export default roderuda

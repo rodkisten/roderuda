@@ -25,7 +25,7 @@ export default class Resources extends Tool {
     this._style = evalCss(require('./Resources.scss'))
 
     this.name = 'resources'
-    this._hideErudaSetting = false
+    this._hideRodErudaSetting = false
     this._observeElement = true
   }
   init($el, container) {
@@ -289,30 +289,30 @@ export default class Resources extends Tool {
     const container = this._container
 
     $el
-      .on('click', '.eruda-refresh-script', () => {
+      .on('click', '.roderuda-refresh-script', () => {
         container.notify('Refreshed', { icon: 'success' })
         this.refreshScript()
       })
-      .on('click', '.eruda-refresh-stylesheet', () => {
+      .on('click', '.roderuda-refresh-stylesheet', () => {
         container.notify('Refreshed', { icon: 'success' })
         this.refreshStylesheet()
       })
-      .on('click', '.eruda-refresh-iframe', () => {
+      .on('click', '.roderuda-refresh-iframe', () => {
         container.notify('Refreshed', { icon: 'success' })
         this.refreshIframe()
       })
-      .on('click', '.eruda-refresh-image', () => {
+      .on('click', '.roderuda-refresh-image', () => {
         container.notify('Refreshed', { icon: 'success' })
         this.refreshImage()
       })
-      .on('click', '.eruda-img-link', function () {
+      .on('click', '.roderuda-img-link', function () {
         const src = $(this).attr('src')
 
         showSources('img', src)
       })
-      .on('click', '.eruda-css-link', linkFactory('css'))
-      .on('click', '.eruda-js-link', linkFactory('js'))
-      .on('click', '.eruda-iframe-link', linkFactory('iframe'))
+      .on('click', '.roderuda-css-link', linkFactory('css'))
+      .on('click', '.roderuda-js-link', linkFactory('js'))
+      .on('click', '.roderuda-iframe-link', linkFactory('iframe'))
 
     function showSources(type, data) {
       const sources = container.get('sources')
@@ -354,23 +354,23 @@ export default class Resources extends Tool {
     if (!settings) return
 
     settings
-      .remove(cfg, 'hideErudaSetting')
+      .remove(cfg, 'hideRodErudaSetting')
       .remove(cfg, 'observeElement')
       .remove('Resources')
   }
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('resources', {
-      hideErudaSetting: true,
+      hideRodErudaSetting: true,
       observeElement: true,
     }))
 
-    if (cfg.get('hideErudaSetting')) this._hideErudaSetting = true
+    if (cfg.get('hideRodErudaSetting')) this._hideRodErudaSetting = true
     if (!cfg.get('observeElement')) this._observeElement = false
 
     cfg.on('change', (key, val) => {
       switch (key) {
-        case 'hideErudaSetting':
-          this._hideErudaSetting = val
+        case 'hideRodErudaSetting':
+          this._hideRodErudaSetting = val
           return
         case 'observeElement':
           this._observeElement = val
@@ -381,7 +381,7 @@ export default class Resources extends Tool {
     const settings = this._container.get('settings')
     settings
       .text('Resources')
-      .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
+      .switch(cfg, 'hideRodErudaSetting', 'Hide RodEruda Setting')
       .switch(cfg, 'observeElement', 'Auto Refresh Elements')
       .separator()
   }

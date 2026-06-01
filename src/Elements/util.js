@@ -14,9 +14,9 @@ export function formatNodeName(node, { noAttr = false } = {}) {
 
   const { id, className, attributes } = node
 
-  let ret = `<span class="eruda-tag-name-color">${node.tagName.toLowerCase()}</span>`
+  let ret = `<span class="roderuda-tag-name-color">${node.tagName.toLowerCase()}</span>`
 
-  if (id !== '') ret += `<span class="eruda-function-color">#${id}</span>`
+  if (id !== '') ret += `<span class="roderuda-function-color">#${id}</span>`
 
   if (isStr(className)) {
     let classes = ''
@@ -24,14 +24,14 @@ export function formatNodeName(node, { noAttr = false } = {}) {
       if (val.trim() === '') return
       classes += `.${val}`
     })
-    ret += `<span class="eruda-attribute-name-color">${classes}</span>`
+    ret += `<span class="roderuda-attribute-name-color">${classes}</span>`
   }
 
   if (!noAttr) {
     each(attributes, (attr) => {
       const name = attr.name
       if (name === 'id' || name === 'class' || name === 'style') return
-      ret += ` <span class="eruda-attribute-name-color">${name}</span><span class="eruda-operator-color">="</span><span class="eruda-string-color">${attr.value}</span><span class="eruda-operator-color">"</span>`
+      ret += ` <span class="roderuda-attribute-name-color">${name}</span><span class="roderuda-operator-color">="</span><span class="roderuda-string-color">${attr.value}</span><span class="roderuda-operator-color">"</span>`
     })
   }
 

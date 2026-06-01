@@ -71,7 +71,7 @@ export default class EntryBtn extends Emitter {
     $container.append(
       c('<div class="entry-btn"><span class="icon-tool"></span></div>')
     )
-    this._$el = $container.find('.eruda-entry-btn')
+    this._$el = $container.find('.roderuda-entry-btn')
   }
   _resetPos(orientationChanged) {
     const cfg = this.config
@@ -145,7 +145,7 @@ export default class EntryBtn extends Emitter {
       })
     }
 
-    $el.rmClass('eruda-active')
+    $el.rmClass('roderuda-active')
   }
   _bindEvent() {
     const $el = this._$el

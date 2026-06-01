@@ -1,85 +1,132 @@
 <div align="center">
-  <a href="https://eruda.liriliri.io/" target="_blank">
-    <img src="https://eruda.liriliri.io/icon.png" width="400">
-  </a>
+  <h1>RodEruda</h1>
+  <p>Console for Mobile Browsers — a fork and rebrand of <a href="https://github.com/liriliri/eruda">Eruda</a></p>
 </div>
-
-<h1 align="center">Eruda</h1>
 
 <div align="center">
 
-Console for Mobile Browsers.
-
-[![NPM version][npm-image]][npm-url]
-[![Build status][ci-image]][ci-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![Downloads][jsdelivr-image]][jsdelivr-url]
 [![License][license-image]][npm-url]
 
 </div>
 
-[npm-image]: https://img.shields.io/npm/v/eruda?style=flat-square
-[npm-url]: https://npmjs.org/package/eruda
-[jsdelivr-image]: https://img.shields.io/jsdelivr/npm/hm/eruda?style=flat-square
-[jsdelivr-url]: https://www.jsdelivr.com/package/npm/eruda
-[ci-image]: https://img.shields.io/github/actions/workflow/status/liriliri/eruda/main.yml?branch=master&style=flat-square
-[ci-url]: https://github.com/liriliri/eruda/actions/workflows/main.yml 
-[codecov-image]: https://img.shields.io/codecov/c/github/liriliri/eruda?style=flat-square
-[codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
-[license-image]: https://img.shields.io/npm/l/eruda?style=flat-square
-[donate-image]: https://img.shields.io/badge/$-donate-0070ba.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/roderuda
+[license-image]: https://img.shields.io/npm/l/roderuda?style=flat-square
 
 <img src="https://eruda.liriliri.io/screenshot.jpg" style="width:100%">
 
-## Demo
-
-![Demo](https://eruda.liriliri.io/qrcode.png)
-
-Browse it on your phone: [eruda.liriliri.io](https://eruda.liriliri.io/)
-
 ## Install
 
-You can get it on npm.
+```bash
+npm install roderuda --save-dev
+```
+
+Add this script to your page:
+
+```html
+<script src="node_modules/roderuda/roderuda.js"></script>
+<script>RodEruda.init();</script>
+```
+
+Or use the CDN from GitHub Pages:
+
+```html
+<script src="https://oirodolfo.github.io/eruda-console-browser/roderuda/roderuda.js"></script>
+<script>RodEruda.init();</script>
+```
+
+Minified version:
+
+```html
+<script src="https://oirodolfo.github.io/eruda-console-browser/roderuda/roderuda.min.js"></script>
+<script>RodEruda.init();</script>
+```
+
+## Browser Global
+
+When loaded via a `<script>` tag, `RodEruda` is exposed as `window.RodEruda`.
+
+```html
+<script src="roderuda.js"></script>
+<script>
+  RodEruda.init();
+  RodEruda.show();
+</script>
+```
+
+## Build
+
+This project uses [tsdown](https://tsdown.dev) for bundling.
+
+| Output file | Description |
+|---|---|
+| `dist/roderuda.js` | Non-minified, sourcemap included |
+| `dist/roderuda.min.js` | Minified, sourcemap included |
+| `dist/roderuda.with-comments.js` | Non-minified, comments preserved, no sourcemap |
 
 ```bash
-npm install eruda --save-dev
+# Full build (all three outputs)
+npm run build
+
+# Minified only
+npm run build:min
+
+# Dev build (development mode)
+npm run build:dev
+
+# Type check
+npm run typecheck
+
+# Tests
+npm run test
+
+# Clean dist/
+npm run clean
 ```
 
-Add this script to your page.
+## GitHub Pages
 
-```html
-<script src="node_modules/eruda/eruda.js"></script>
-<script>eruda.init();</script>
+Built assets are published to GitHub Pages under the `/roderuda` path:
+
+- https://oirodolfo.github.io/eruda-console-browser/roderuda/
+
+## API
+
+`RodEruda` exposes the same API as the original Eruda:
+
+```js
+// Initialize
+RodEruda.init();
+
+// Initialize with options
+RodEruda.init({
+  container: document.getElementById('my-container'),
+  tool: ['console', 'elements'],
+  useShadowDom: true,
+  inline: false,
+  defaults: {
+    theme: 'Dark',
+    displaySize: 50,
+  },
+});
+
+// Show / hide
+RodEruda.show();
+RodEruda.hide();
+
+// Destroy
+RodEruda.destroy();
+
+// Get a tool panel
+const consolePanel = RodEruda.get('console');
 ```
-
-It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [cdnjs](https://cdnjs.com/libraries/eruda).
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
-```
-
-For more detailed usage instructions, please read the documentation at [eruda.liriliri.io](https://eruda.liriliri.io/docs/)!
 
 ## Related Projects
 
-* [eruda-android](https://github.com/liriliri/eruda-android): Simple webview with eruda loaded automatically.
-* [chii](https://github.com/liriliri/chii): Remote debugging tool.
+* [eruda](https://github.com/liriliri/eruda): Original project this was forked from.
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools protocol JavaScript implementation.
-* [licia](https://github.com/liriliri/licia): Utility library used by eruda.
-* [luna](https://github.com/liriliri/luna): UI components used by eruda.
-* [vivy](https://github.com/liriliri/vivy-docs): Icon image generation.
+* [licia](https://github.com/liriliri/licia): Utility library.
+* [luna](https://github.com/liriliri/luna): UI components.
 
-## Third Party
+## License
 
-* [eruda-pixel](https://github.com/Faithree/eruda-pixel): UI pixel restoration tool.
-* [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin): Eruda webpack plugin.
-* [eruda-vue-devtools](https://github.com/Zippowxk/vue-devtools-plugin): Eruda Vue-devtools plugin.
-
-## Backers
-
-<a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img src="https://opencollective.com/eruda/backers.svg?width=890"></a>
-
-## Contribution
-
-Read [Contributing Guide](https://eruda.liriliri.io/docs/contributing.html) for development setup instructions.
+MIT

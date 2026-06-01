@@ -20,7 +20,7 @@ export default [
     name: 'Device',
     val: [
       '<table><tbody>',
-      `<tr><td class="eruda-device-key">screen</td><td>${screen.width} * ${screen.height}</td></tr>`,
+      `<tr><td class="roderuda-device-key">screen</td><td>${screen.width} * ${screen.height}</td></tr>`,
       `<tr><td>viewport</td><td>${window.innerWidth} * ${window.innerHeight}</td></tr>`,
       `<tr><td>pixel ratio</td><td>${window.devicePixelRatio}</td></tr>`,
       '</tbody></table>',
@@ -30,7 +30,7 @@ export default [
     name: 'System',
     val: [
       '<table><tbody>',
-      `<tr><td class="eruda-system-key">os</td><td>${detectOs()}</td></tr>`,
+      `<tr><td class="roderuda-system-key">os</td><td>${detectOs()}</td></tr>`,
       `<tr><td>browser</td><td>${
         browser.name + ' ' + browser.version
       }</td></tr>`,
@@ -75,7 +75,7 @@ export default [
   {
     name: 'About',
     val:
-      '<a href="https://eruda.liriliri.io" target="_blank">Eruda v' +
+      '<a href="https://github.com/oirodolfo/eruda-console-browser" target="_blank">RodEruda v' +
       VERSION +
       '</a>',
   },

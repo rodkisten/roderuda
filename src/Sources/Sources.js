@@ -225,7 +225,7 @@ export default class Sources extends Tool {
     }
 
     const objViewer = new LunaObjectViewer(
-      this._$el.find('.eruda-json').get(0),
+      this._$el.find('.roderuda-json').get(0),
       {
         unenumerable: true,
         accessGetter: true,

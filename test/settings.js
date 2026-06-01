@@ -1,8 +1,8 @@
 describe('settings', function () {
-  let tool = eruda.get('settings')
-  let $tool = $('.eruda-settings')
+  let tool = roderuda.get('settings')
+  let $tool = $('.roderuda-settings')
 
-  let cfg = eruda.Settings.createCfg('test')
+  let cfg = roderuda.Settings.createCfg('test')
   cfg.set({
     testSwitch: false,
     testSelect: '1',

@@ -76,8 +76,8 @@ export default class Storage {
       // According to issue 20, not all values are guaranteed to be string.
       if (!isStr(val)) return
 
-      if (resources.config.get('hideErudaSetting')) {
-        if (startWith(key, 'eruda') || key === 'active-eruda') return
+      if (resources.config.get('hideRodErudaSetting')) {
+        if (startWith(key, 'roderuda') || key === 'active-roderuda') return
       }
 
       storeData.push({

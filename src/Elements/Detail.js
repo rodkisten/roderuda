@@ -274,7 +274,7 @@ export default class Detail {
     ret.attributes = formatAttr(attributes)
     ret.name = formatNodeName({ tagName, id, className, attributes })
 
-    const events = el.erudaEvents
+    const events = el.roderuda_events
     if (events && keys(events).length !== 0) ret.listeners = events
 
     if (needNoStyle(tagName)) {
@@ -321,7 +321,7 @@ export default class Detail {
           this._render()
         })
       })
-      .on('click', '.eruda-listener-content', function () {
+      .on('click', '.roderuda-listener-content', function () {
         const text = $(this).text()
         const sources = devtools.get('sources')
 
@@ -434,7 +434,7 @@ function processStyleRule(val) {
   return val
     .replace(
       regColor,
-      '<span class="eruda-style-color" style="background-color: $&"></span>$&'
+      '<span class="roderuda-style-color" style="background-color: $&"></span>$&'
     )
     .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`)
 }
@@ -483,7 +483,7 @@ const wrapLink = (link) => `<a href="${link}" target="_blank">${link}</a>`
 function addEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
 
-  const events = (el.erudaEvents = el.erudaEvents || {})
+  const events = (el.roderuda_events = el.roderuda_events || {})
 
   events[type] = events[type] || []
   events[type].push({
@@ -496,7 +496,7 @@ function addEvent(el, type, listener, useCapture = false) {
 function rmEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
 
-  const events = el.erudaEvents
+  const events = el.roderuda_events
 
   if (!(events && events[type])) return
 
@@ -510,7 +510,7 @@ function rmEvent(el, type, listener, useCapture = false) {
   }
 
   if (listeners.length === 0) delete events[type]
-  if (keys(events).length === 0) delete el.erudaEvents
+  if (keys(events).length === 0) delete el.roderuda_events
 }
 
 const getWinEventProto = () => {

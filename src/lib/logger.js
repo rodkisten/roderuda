@@ -3,7 +3,7 @@ import Logger from 'licia/Logger'
 let logger
 
 export default logger = new Logger(
-  '[Eruda]',
+  '[RodEruda]',
   ENV === 'production' ? 'warn' : 'debug'
 )
 

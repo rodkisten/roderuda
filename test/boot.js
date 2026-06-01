@@ -14,11 +14,11 @@ function boot(name, cb) {
     }
 
     try {
-      eruda.init(options)
+      roderuda.init(options)
     } catch (e) {
       alert(e)
     }
-    eruda.show()
+    roderuda.show()
 
     cb && cb()
 

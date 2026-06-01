@@ -81,14 +81,17 @@ export function pxToNum(str) {
   return toNum(str.replace('px', ''))
 }
 
-export function isErudaEl(el) {
+export function isRodErudaEl(el) {
   while (el) {
-    if (el.id === 'eruda') return true
+    if (el.id === 'roderuda') return true
     el = el.parentNode
   }
 
   return false
 }
+
+/** @deprecated Use isRodErudaEl instead */
+export const isErudaEl = isRodErudaEl
 
 export function isChobitsuEl(el) {
   while (el) {
@@ -106,7 +109,7 @@ export function isChobitsuEl(el) {
 }
 
 export function classPrefix(str) {
-  if (/<[^>]*>/g.test(str)) {
+  if (/<[^<>]*>/.test(str)) {
     try {
       const tree = html.parse(str)
       traverseTree(tree, (node) => {
@@ -134,7 +137,7 @@ function traverseTree(tree, handler) {
 }
 
 function processClass(str) {
-  const prefix = 'eruda-'
+  const prefix = 'roderuda-'
 
   return map(trim(str).split(/\s+/), (singleClass) => {
     if (contain(singleClass, prefix)) {
