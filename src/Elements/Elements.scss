@@ -2,6 +2,9 @@
 @use '../style/mixin' as *;
 
 #elements {
+  .dom-viewer {
+    user-select: auto !important;
+  }
   .elements {
     @include absolute();
     padding-top: 40px;
