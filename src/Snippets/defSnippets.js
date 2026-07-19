@@ -158,7 +158,7 @@ export default [
   },
 ]
 
-evalCss(require('./searchText.scss'), document.head)
+evalCss(require('./searchText.css'), document.head)
 
 function search(text) {
   const root = document.body

@@ -1,0 +1,7 @@
+.search-highlight-block {
+  display: inline;
+}
+.search-highlight-block .keyword {
+  background: var(--console-warn-background);
+  color: var(--console-warn-foreground);
+}

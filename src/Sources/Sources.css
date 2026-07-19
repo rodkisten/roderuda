@@ -1,0 +1,76 @@
+#sources {
+  font-size: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: var(--foreground);
+}
+#sources .code-wrapper,
+#sources .raw-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  min-height: 100%;
+}
+#sources .raw,
+#sources .code {
+  height: 100%;
+}
+#sources .raw .keyword,
+#sources .code .keyword {
+  color: var(--keyword-color);
+}
+#sources .raw .comment,
+#sources .code .comment {
+  color: var(--comment-color);
+}
+#sources .raw .number,
+#sources .code .number {
+  color: var(--number-color);
+}
+#sources .raw .string,
+#sources .code .string {
+  color: var(--string-color);
+}
+#sources .raw .operator,
+#sources .code .operator {
+  color: var(--operator-color);
+}
+#sources .raw[data-type=html] .keyword,
+#sources .code[data-type=html] .keyword {
+  color: var(--tag-name-color);
+}
+#sources .image {
+  font-size: 12px;
+}
+#sources .image .breadcrumb {
+  background: var(--darker-background);
+  color: var(--primary);
+  user-select: text;
+  margin-bottom: 10px;
+  word-break: break-all;
+  padding: 10px;
+  font-size: 16px;
+  min-height: 40px;
+  border-bottom: 1px solid var(--border);
+}
+#sources .image .img-container {
+  text-align: center;
+}
+#sources .image .img-container img {
+  max-width: 100%;
+}
+#sources .image .img-info {
+  text-align: center;
+  margin: 20px 0;
+  color: var(--foreground);
+}
+#sources .json {
+  padding: 0 10px;
+}
+#sources .json * {
+  user-select: text;
+}
+#sources iframe {
+  width: 100%;
+  height: 100%;
+}

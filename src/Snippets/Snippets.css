@@ -1,0 +1,40 @@
+#snippets {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px;
+}
+#snippets .section {
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+}
+#snippets .section:active .name {
+  background: var(--highlight);
+  color: var(--select-foreground);
+}
+#snippets .section .name {
+  padding: 10px;
+  line-height: 18px;
+  color: var(--primary);
+  background: var(--darker-background);
+  transition: background-color 0.3s;
+}
+#snippets .section .name .btn {
+  margin-left: 10px;
+  float: right;
+  text-align: center;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+}
+#snippets .section .description {
+  font-size: 12px;
+  color: var(--foreground);
+  padding: 10px;
+  transition: background-color 0.3s;
+}
+
+.safe-area #snippets {
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}

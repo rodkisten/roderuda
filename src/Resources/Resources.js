@@ -22,7 +22,7 @@ export default class Resources extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Resources.scss'))
+    this._style = evalCss(require('./Resources.css'))
 
     this.name = 'resources'
     this._hideRodErudaSetting = false

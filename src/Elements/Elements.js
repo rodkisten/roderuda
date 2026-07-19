@@ -22,7 +22,7 @@ export default class Elements extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Elements.scss'))
+    this._style = evalCss(require('./Elements.css'))
 
     this.name = 'elements'
     this._selectElement = false

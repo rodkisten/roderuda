@@ -43,7 +43,7 @@ export default class DevTools extends Emitter {
       defaults
     )
 
-    this._style = evalCss(require('./DevTools.scss'))
+    this._style = evalCss(require('./DevTools.css'))
 
     this.$container = $container
     this._isShow = false

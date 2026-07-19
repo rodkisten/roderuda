@@ -1,0 +1,466 @@
+.container .luna-console {
+  background: var(--background);
+}
+.container .luna-console-header {
+  color: var(--link-color);
+  border-bottom-color: var(--border);
+}
+.container .luna-console-nesting-level {
+  border-right-color: var(--border);
+}
+.container .luna-console-nesting-level::before {
+  border-bottom-color: var(--border);
+}
+.container .luna-console-log-container.luna-console-selected .luna-console-log-item {
+  background: var(--contrast);
+}
+.container .luna-console-log-container.luna-console-selected .luna-console-log-item:not(.luna-console-error):not(.luna-console-warn) {
+  border-color: var(--border);
+}
+.container .luna-console-log-item {
+  border-bottom-color: var(--border);
+  color: var(--foreground);
+}
+.container .luna-console-log-item a {
+  color: var(--link-color) !important;
+}
+.container .luna-console-log-item .luna-console-icon-container .luna-console-icon {
+  color: var(--foreground);
+}
+.container .luna-console-log-item .luna-console-icon-container .luna-console-icon-error {
+  color: #ef3842;
+}
+.container .luna-console-log-item .luna-console-icon-container .luna-console-icon-warn {
+  color: #e8a400;
+}
+.container .luna-console-log-item .luna-console-count {
+  color: var(--select-foreground);
+  background: var(--highlight);
+}
+.container .luna-console-log-item.luna-console-warn {
+  color: var(--console-warn-foreground);
+  background: var(--console-warn-background);
+  border-color: var(--console-warn-border);
+}
+.container .luna-console-log-item.luna-console-error {
+  background: var(--console-error-background);
+  color: var(--console-error-foreground);
+  border-color: var(--console-error-border);
+}
+.container .luna-console-log-item.luna-console-error .luna-console-count {
+  background: var(--console-error-foreground);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-key {
+  color: var(--var-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-number {
+  color: var(--number-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-null {
+  color: var(--operator-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-string {
+  color: var(--string-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-boolean {
+  color: var(--keyword-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-special {
+  color: var(--operator-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-keyword {
+  color: var(--keyword-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-operator {
+  color: var(--operator-color);
+}
+.container .luna-console-log-item .luna-console-code .luna-console-comment {
+  color: var(--comment-color);
+}
+.container .luna-console-log-item .luna-console-log-content .luna-console-undefined,
+.container .luna-console-log-item .luna-console-log-content .luna-console-null {
+  color: var(--operator-color);
+}
+.container .luna-console-log-item .luna-console-log-content .luna-console-number {
+  color: var(--number-color);
+}
+.container .luna-console-log-item .luna-console-log-content .luna-console-boolean {
+  color: var(--keyword-color);
+}
+.container .luna-console-log-item .luna-console-log-content .luna-console-symbol,
+.container .luna-console-log-item .luna-console-log-content .luna-console-regexp {
+  color: var(--var-color);
+}
+.container .luna-console-preview .luna-console-key {
+  color: var(--var-color);
+}
+.container .luna-console-preview .luna-console-number {
+  color: var(--number-color);
+}
+.container .luna-console-preview .luna-console-null {
+  color: var(--operator-color);
+}
+.container .luna-console-preview .luna-console-string {
+  color: var(--string-color);
+}
+.container .luna-console-preview .luna-console-boolean {
+  color: var(--keyword-color);
+}
+.container .luna-console-preview .luna-console-special {
+  color: var(--operator-color);
+}
+.container .luna-console-preview .luna-console-keyword {
+  color: var(--keyword-color);
+}
+.container .luna-console-preview .luna-console-operator {
+  color: var(--operator-color);
+}
+.container .luna-console-preview .luna-console-comment {
+  color: var(--comment-color);
+}
+.container .luna-object-viewer {
+  color: var(--primary);
+  font-size: 12px !important;
+}
+.container .luna-object-viewer-null {
+  color: var(--operator-color);
+}
+.container .luna-object-viewer-string,
+.container .luna-object-viewer-regexp {
+  color: var(--string-color);
+}
+.container .luna-object-viewer-number {
+  color: var(--number-color);
+}
+.container .luna-object-viewer-boolean {
+  color: var(--keyword-color);
+}
+.container .luna-object-viewer-special {
+  color: var(--operator-color);
+}
+.container .luna-object-viewer-key,
+.container .luna-object-viewer-key-lighter {
+  color: var(--var-color);
+}
+.container .luna-object-viewer-expanded:before {
+  border-color: transparent;
+  border-top-color: var(--foreground);
+}
+.container .luna-object-viewer-collapsed:before {
+  border-top-color: transparent;
+  border-left-color: var(--foreground);
+}
+.container .luna-notification {
+  pointer-events: none !important;
+  padding: 10px;
+  z-index: 1000;
+}
+.container .luna-notification-item {
+  z-index: 500;
+  color: var(--foreground);
+  background: var(--background);
+  box-shadow: none;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+}
+.container .luna-notification-upper {
+  margin-bottom: 10px;
+}
+.container .luna-notification-lower {
+  margin-top: 10px;
+}
+.container .luna-data-grid {
+  color: var(--foreground);
+  background: var(--background);
+  border-color: var(--border);
+}
+.container .luna-data-grid th,
+.container .luna-data-grid td {
+  border-color: var(--border);
+}
+.container .luna-data-grid th {
+  background: var(--darker-background);
+}
+.container .luna-data-grid th.luna-data-grid-sortable:hover, .container .luna-data-grid th.luna-data-grid-sortable:active {
+  color: var(--select-foreground);
+  background: var(--highlight);
+}
+.container .luna-data-grid .luna-data-grid-data-container .luna-data-grid-node.luna-data-grid-selected,
+.container .luna-data-grid .luna-data-grid-data-container .luna-data-grid-node.luna-data-grid-selectable:hover {
+  background: var(--highlight);
+}
+.container .luna-data-grid .luna-data-grid-data-container tr:nth-child(even) {
+  background: var(--contrast);
+}
+.container .luna-data-grid:focus .luna-data-grid-data-container .luna-data-grid-node.luna-data-grid-selected {
+  background: var(--accent);
+}
+.container .luna-dom-viewer {
+  color: var(--foreground);
+}
+.container .luna-dom-viewer .luna-dom-viewer-html-tag,
+.container .luna-dom-viewer .luna-dom-viewer-tag-name {
+  color: var(--tag-name-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-attribute-name {
+  color: var(--attribute-name-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-attribute-value {
+  color: var(--string-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-html-comment {
+  color: var(--comment-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-tree-item:hover .luna-dom-viewer-selection {
+  background: var(--contrast);
+}
+.container .luna-dom-viewer .luna-dom-viewer-tree-item.luna-dom-viewer-selected .luna-dom-viewer-selection {
+  background: var(--highlight);
+}
+.container .luna-dom-viewer .luna-dom-viewer-tree-item.luna-dom-viewer-selected:focus .luna-dom-viewer-selection {
+  background: var(--accent);
+  opacity: 0.2;
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-key {
+  color: var(--var-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-number {
+  color: var(--number-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-null {
+  color: var(--operator-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-string {
+  color: var(--string-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-boolean {
+  color: var(--keyword-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-special {
+  color: var(--operator-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-keyword {
+  color: var(--keyword-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-operator {
+  color: var(--operator-color);
+}
+.container .luna-dom-viewer .luna-dom-viewer-text-node .luna-dom-viewer-comment {
+  color: var(--comment-color);
+}
+.container .luna-dom-viewer-children {
+  margin: 0;
+  padding-left: 15px !important;
+}
+.container .inline .luna-modal,
+.container .inline .luna-notification {
+  position: absolute;
+}
+.container .luna-modal {
+  z-index: 9999999;
+}
+.container .luna-modal-body,
+.container .luna-modal-input {
+  color: var(--foreground);
+  background: var(--background);
+}
+.container .luna-modal-body {
+  border-color: var(--border);
+}
+.container .luna-modal-input {
+  user-select: text !important;
+  border-color: var(--border);
+}
+.container .luna-modal-button-group .luna-modal-secondary {
+  border-color: var(--border);
+  color: var(--foreground);
+  background: var(--background);
+}
+.container .luna-modal-button-group .luna-modal-primary {
+  background: var(--accent);
+}
+.container .luna-modal-button-group .luna-modal-button:active::before {
+  background: var(--accent);
+}
+.container .luna-tab {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--foreground);
+  background: var(--darker-background);
+}
+.container .luna-tab-tabs-container {
+  border-color: var(--border);
+}
+.container .luna-tab-item.luna-tab-selected, .container .luna-tab-item:hover {
+  background: var(--highlight);
+  color: var(--select-foreground);
+}
+.container .luna-tab-slider {
+  background: var(--accent);
+}
+.container .luna-text-viewer {
+  color: var(--foreground);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  font-size: 12px;
+}
+.container .luna-text-viewer .luna-text-viewer-line-text {
+  user-select: text;
+}
+.container .luna-text-viewer .luna-text-viewer-line-text * {
+  user-select: text;
+}
+.container .luna-text-viewer .luna-text-viewer-copy,
+.container .luna-text-viewer .luna-text-viewer-line-number {
+  border-color: var(--border);
+}
+.container .luna-text-viewer .luna-text-viewer-copy .luna-text-viewer-icon-check {
+  color: var(--accent);
+}
+.container .luna-text-viewer .luna-text-viewer-copy {
+  background-color: var(--background);
+}
+.container .luna-setting {
+  color: var(--foreground);
+  background: var(--background);
+}
+.container .luna-setting-item:hover, .container .luna-setting-item.luna-setting-selected {
+  background: var(--darker-background);
+}
+.container .luna-setting-item.luna-setting-selected:focus {
+  outline: none;
+}
+.container .luna-setting-item-title {
+  font-size: 14px;
+}
+.container .luna-setting-item-separator {
+  border-color: var(--border);
+}
+.container .luna-setting-item-checkbox input {
+  border-color: var(--border);
+}
+.container .luna-setting-item-checkbox input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+.container .luna-setting-item-select .luna-setting-select select {
+  color: var(--foreground);
+  border-color: var(--border);
+  background: var(--background);
+}
+.container .luna-setting-item-select .luna-setting-select:after {
+  border-top-color: var(--foreground);
+}
+.container .luna-setting-item-button button {
+  color: var(--accent);
+  background: var(--background);
+  border-color: var(--border);
+}
+.container .luna-setting-item-button button:hover, .container .luna-setting-item-button button:active {
+  background: var(--darker-background);
+}
+.container .luna-setting-item-button button:active {
+  border: 1px solid var(--accent);
+}
+.container .luna-setting-item-number .luna-setting-range-container .luna-setting-range-track .luna-setting-range-track-bar {
+  background: var(--border);
+}
+.container .luna-setting-item-number .luna-setting-range-container .luna-setting-range-track .luna-setting-range-track-bar .luna-setting-range-track-progress {
+  background: var(--accent);
+}
+.container .luna-setting-item-number .luna-setting-range-container input::-webkit-slider-thumb {
+  border-color: var(--border);
+  background: radial-gradient(circle at center, var(--dark) 0, var(--dark) 15%, var(--light) 22%, var(--light) 100%);
+}
+.container .luna-box-model {
+  background: var(--background);
+}
+.container .luna-box-model-position,
+.container .luna-box-model-margin,
+.container .luna-box-model-border,
+.container .luna-box-model-padding,
+.container .luna-box-model-content {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.container {
+  min-width: 320px;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999999;
+  color: var(--foreground);
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, ".SFNSDisplay-Regular", "Helvetica Neue", "Lucida Grande", "Segoe UI", Tahoma, sans-serif;
+  font-size: 14px;
+  direction: ltr;
+}
+.container.dark {
+  color-scheme: dark;
+}
+.container * {
+  box-sizing: border-box;
+  pointer-events: all;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+}
+.container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.container h1,
+.container h2,
+.container h3,
+.container h4 {
+  margin: 0;
+}
+.container h2 {
+  font-size: 14px;
+}
+.container h2 [class^=icon-],
+.container h2 [class*=" icon-"] {
+  font-weight: normal;
+}
+.container.inline {
+  position: static;
+}
+
+.hidden {
+  display: none;
+}
+
+.icon-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default !important;
+}
+.icon-disabled:active {
+  color: inherit !important;
+}
+
+.tag-name-color {
+  color: var(--tag-name-color);
+}
+
+.function-color {
+  color: var(--function-color);
+}
+
+.attribute-name-color {
+  color: var(--attribute-name-color);
+}
+
+.operator-color {
+  color: var(--operator-color);
+}
+
+.string-color {
+  color: var(--string-color);
+}

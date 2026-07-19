@@ -259,7 +259,7 @@ export default {
     }
 
     evalCss(
-      require('./style/reset.scss') +
+      require('./style/reset.css') +
         require('luna-object-viewer/luna-object-viewer.css') +
         require('luna-console/luna-console.css') +
         require('luna-notification/luna-notification.css') +
@@ -270,7 +270,7 @@ export default {
         require('luna-text-viewer/luna-text-viewer.css') +
         require('luna-setting/luna-setting.css') +
         require('luna-box-model/luna-box-model.css') +
-        require('./style/style.scss') +
+        require('./style/style.css') +
         require('./style/icon.css')
     )
   },

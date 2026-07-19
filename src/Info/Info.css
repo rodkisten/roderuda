@@ -1,0 +1,58 @@
+#info {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#info li {
+  margin: 10px;
+  border: 1px solid var(--border);
+}
+#info li .title,
+#info li .content {
+  padding: 10px;
+}
+#info li .title {
+  position: relative;
+  padding-bottom: 0;
+  color: var(--accent);
+}
+#info li .title .icon-copy {
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  color: var(--primary);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+#info li .title .icon-copy:active {
+  color: var(--accent);
+}
+#info li .content {
+  margin: 0;
+  user-select: text;
+  color: var(--foreground);
+  font-size: 12px;
+  word-break: break-all;
+}
+#info li .content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#info li .content table th,
+#info li .content table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+}
+#info li .content * {
+  user-select: text;
+}
+#info li .content a {
+  color: var(--link-color);
+}
+#info li .device-key,
+#info li .system-key {
+  width: 100px;
+}
+
+.safe-area #info {
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}

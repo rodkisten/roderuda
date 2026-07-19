@@ -1,9 +1,0 @@
-@use '../style/variable' as *;
-
-.search-highlight-block {
-  display: inline;
-  .keyword {
-    background: var(--console-warn-background);
-    color: var(--console-warn-foreground);
-  }
-}

@@ -15,7 +15,7 @@ export default class Info extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Info.scss'))
+    this._style = evalCss(require('./Info.css'))
 
     this.name = 'info'
     this._infos = []
