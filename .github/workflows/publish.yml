@@ -12,77 +12,192 @@ permissions:
   pages: write
   id-token: write
 
+# Prevents wasting runners and deploying an outdated commit when pushes
+# happen in quick succession.
+concurrency:
+  group: github-pages-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    steps:
-      - uses: actions/checkout@v6
+    env:
+      GIST_ID: ${{ vars.GIST_ID }}
 
-      - uses: actions/setup-node@v6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # Install pnpm before setup-node so setup-node can resolve the pnpm
+      # store when configuring its built-in dependency cache.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
-
-      - name: Enable corepack
-        run: corepack enable
-        
-      - name: Prepare pnpm
-        run: corepack prepare pnpm@11.5.0 --activate
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install dependencies
-        run: pnpm ci
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build
         run: pnpm build
 
-      - name: Verify dist files
+      - name: Verify build
+        shell: bash
         run: |
-          test -f dist/roderuda.js
-          test -f dist/roderuda.min.js
-          test -f dist/roderuda.with-comments.js
+          set -euo pipefail
 
-      - name: Prepare GitHub Pages content
+          required_files=(
+            "dist/roderuda.js"
+            "dist/roderuda.min.js"
+            "dist/roderuda.with-comments.js"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [[ ! -s "$file" ]]; then
+              echo "::error file=$file::Required build artifact is missing or empty"
+              exit 1
+            fi
+          done
+
+          echo "Build artifacts:"
+          du -h "${required_files[@]}"
+
+      - name: Generate build metadata
+        id: metadata
+        shell: bash
         run: |
+          set -euo pipefail
+
+          BUILD_DATE="$(
+            TZ=America/Sao_Paulo \
+              date '+%d/%m/%Y %H:%M:%S GMT-3'
+          )"
+
+          SHORT_SHA="${GITHUB_SHA::7}"
+
+          cat > dist/build.json <<JSON
+          {
+            "commit": "${GITHUB_SHA}",
+            "commitShort": "${SHORT_SHA}",
+            "builtAt": "${BUILD_DATE}",
+            "timezone": "GMT-3"
+          }
+          JSON
+
+          {
+            echo "date=${BUILD_DATE}"
+            echo "short_sha=${SHORT_SHA}"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Build: ${SHORT_SHA}"
+          echo "Date:  ${BUILD_DATE}"
+
+      - name: Prepare GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+
           mkdir -p pages/roderuda
-          cp dist/roderuda.js         pages/roderuda/roderuda.js
-          cp dist/roderuda.min.js     pages/roderuda/roderuda.min.js
-          cp dist/roderuda.with-comments.js pages/roderuda/roderuda.with-comments.js
-          # Copy sourcemaps if present
-          cp dist/roderuda.js.map     pages/roderuda/ 2>/dev/null || true
-          cp dist/roderuda.min.js.map pages/roderuda/ 2>/dev/null || true
-          # Generate index page
-          cat > pages/roderuda/index.html << 'HTML'
+
+          cp \
+            dist/roderuda.js \
+            dist/roderuda.min.js \
+            dist/roderuda.with-comments.js \
+            dist/build.json \
+            pages/roderuda/
+
+          # Sourcemaps are optional.
+          for map in \
+            dist/roderuda.js.map \
+            dist/roderuda.min.js.map
+          do
+            if [[ -f "$map" ]]; then
+              cp "$map" pages/roderuda/
+            fi
+          done
+
+          cat > pages/roderuda/index.html <<'HTML'
           <!DOCTYPE html>
           <html lang="en">
           <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            >
             <title>RodEruda CDN</title>
+
             <style>
-              body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 0 20px; }
-              pre { background: #f4f4f4; padding: 12px; border-radius: 4px; overflow-x: auto; }
-              a { color: #0070f3; }
+              body {
+                font-family: sans-serif;
+                max-width: 820px;
+                margin: 40px auto;
+                padding: 0 20px;
+              }
+
+              pre {
+                background: #f4f4f4;
+                padding: 12px;
+                border-radius: 4px;
+                overflow-x: auto;
+              }
+
+              a {
+                color: #0070f3;
+              }
             </style>
           </head>
+
           <body>
             <h1>RodEruda</h1>
-            <p>Console for Mobile Browsers — fork of <a href="https://github.com/liriliri/eruda">Eruda</a></p>
+
+            <p>
+              Console for Mobile Browsers — fork of
+              <a href="https://github.com/liriliri/eruda">Eruda</a>
+            </p>
 
             <h2>Files</h2>
+
             <ul>
-              <li><a href="roderuda.js">roderuda.js</a> — non-minified with sourcemap</li>
-              <li><a href="roderuda.min.js">roderuda.min.js</a> — minified with sourcemap</li>
-              <li><a href="roderuda.with-comments.js">roderuda.with-comments.js</a> — non-minified, comments preserved</li>
+              <li>
+                <a href="roderuda.js">roderuda.js</a>
+                — non-minified with sourcemap
+              </li>
+
+              <li>
+                <a href="roderuda.min.js">roderuda.min.js</a>
+                — minified with sourcemap
+              </li>
+
+              <li>
+                <a href="roderuda.with-comments.js">
+                  roderuda.with-comments.js
+                </a>
+                — non-minified, comments preserved
+              </li>
+
+              <li>
+                <a href="build.json">build.json</a>
+                — build metadata
+              </li>
             </ul>
 
             <h2>Usage</h2>
+
             <pre>&lt;script src="https://oirodolfo.github.io/eruda-console-browser/roderuda/roderuda.js"&gt;&lt;/script&gt;
           &lt;script&gt;RodEruda.init();&lt;/script&gt;</pre>
 
@@ -94,40 +209,83 @@ jobs:
           &lt;script src="https://oirodolfo.github.io/eruda-console-browser/roderuda/roderuda.with-comments.js"&gt;&lt;/script&gt;
           &lt;script&gt;RodEruda.init();&lt;/script&gt;</pre>
 
-            <p><a href="https://github.com/oirodolfo/eruda-console-browser">GitHub Repository</a></p>
+            <p>
+              <a href="https://github.com/oirodolfo/eruda-console-browser">
+                GitHub Repository
+              </a>
+            </p>
           </body>
           </html>
           HTML
 
+      - name: Update Gist
+        env:
+          GH_TOKEN: ${{ secrets.GIST_TOKEN }}
+          BUILD_DATE: ${{ steps.metadata.outputs.date }}
+          SHORT_SHA: ${{ steps.metadata.outputs.short_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GIST_ID:-}" ]]; then
+            echo "::error::GIST_ID repository variable is not configured"
+            exit 1
+          fi
+
+          # Build the JSON payload from files instead of passing bundle
+          # contents as shell arguments. This is safer for large builds.
+          jq \
+            --null-input \
+            --arg description \
+              "RodEruda build ${SHORT_SHA} | ${BUILD_DATE}" \
+            --rawfile roderuda \
+              dist/roderuda.js \
+            --rawfile roderuda_min \
+              dist/roderuda.min.js \
+            --rawfile build \
+              dist/build.json \
+            '{
+              description: $description,
+              files: {
+                "roderuda.js": {
+                  content: $roderuda
+                },
+                "roderuda.min.js": {
+                  content: $roderuda_min
+                },
+                "build.json": {
+                  content: $build
+                }
+              }
+            }' \
+          | gh api \
+              --method PATCH \
+              "gists/${GIST_ID}" \
+              --input -
+
+          echo "Gist updated:"
+          echo "  commit: ${GITHUB_SHA}"
+          echo "  date:   ${BUILD_DATE}"
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: pages/
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
-      - name: Upload dist to workflow artifacts
+      - name: Upload dist artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: roderuda-dist
-          path: dist/
-     
-      - name: Verify dist files (again)
-        run: |
-          test -f dist/roderuda.js
-          test -f dist/roderuda.min.js
-          test -f dist/roderuda.with-comments.js
-         
-          echo "=== All files (recursive) ==="
-          find . -not -path '*/node_modules/*' -not -path '*/.*'
-
-          
-      - name: Upload built files to Gist
-        uses: exuanbo/actions-deploy-gist@v1
-        with:
-          token: ${{ secrets.GIST_TOKEN }}
-          gist_id: ${{ vars.GIST_ID }}
-          file_path: ./dist/roderuda.js
-          file_type: text
+          name: roderuda-dist-${{ steps.metadata.outputs.short_sha }}
+          path: |
+            dist/roderuda.js
+            dist/roderuda.min.js
+            dist/roderuda.with-comments.js
+            dist/roderuda.js.map
+            dist/roderuda.min.js.map
+            dist/build.json
+          if-no-files-found: warn
+          compression-level: 9
