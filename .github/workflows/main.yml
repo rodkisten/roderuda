@@ -2,56 +2,89 @@ name: CI
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - master
+      - main
+
   pull_request:
+
+permissions:
+  contents: read
+
+# Cancels outdated CI runs when new commits are pushed to the same branch or PR.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      # Install pnpm before setup-node so its store can be resolved
+      # when setup-node configures the dependency cache.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
-
-      - name: Enable corepack
-        run: corepack enable
-      
-      - name: Prepare pnpm
-        run: corepack prepare pnpm@11.5.0 --activate
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install dependencies
-        run: pnpm ci
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Vite Build
-        run: pnpm build:build
+        run: pnpm build:vite
         continue-on-error: true
 
       - name: Build
         run: pnpm build
 
-      #- name: Test
-      #  run: pnpm test
+      # Enable when the test suite is ready to run in CI.
+      # - name: Test
+      #   run: pnpm test
 
-      - name: Verify dist files
+      - name: Verify build
+        shell: bash
         run: |
-          ls -lh dist/
-          test -f dist/roderuda.js
-          test -f dist/roderuda.min.js
-          test -f dist/roderuda.with-comments.js
+          set -euo pipefail
+
+          required_files=(
+            "dist/roderuda.js"
+            "dist/roderuda.min.js"
+            "dist/roderuda.with-comments.js"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [[ ! -s "$file" ]]; then
+              echo "::error file=$file::Required build artifact is missing or empty"
+              exit 1
+            fi
+          done
+
+          echo "Build artifacts:"
+          du -h "${required_files[@]}"
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: roderuda-dist
+          name: roderuda-dist-${{ github.sha }}
           path: dist/
+          if-no-files-found: error
+          retention-days: 7
