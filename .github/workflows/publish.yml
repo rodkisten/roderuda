@@ -113,11 +113,17 @@ jobs:
         with:
           name: roderuda-dist
           path: dist/
+     
+      - name: Verify dist files
+        run: |
+          test -f dist/roderuda.js
+          test -f dist/roderuda.min.js
+          test -f dist/roderuda.with-comments.js
 
       - name: Upload built files to Gist
         uses: exuanbo/actions-deploy-gist@v1
         with:
           token: ${{ secrets.GIST_TOKEN }}
           gist_id: ${{ vars.GIST_ID }}
-          file_path: dist/roderuda.min.js
+          file_path: dist/roderuda.js
           file_type: text
