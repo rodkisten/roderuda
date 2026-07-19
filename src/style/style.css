@@ -1,39 +1,19 @@
-@use './variable' as *;
+:root {
+  --roderuda-padding: 10px;
+  --roderuda-font-size: 14px;
+  --roderuda-font-size-s: 12px;
+  --roderuda-font-size-l: 16px;
+  --roderuda-font-family: -apple-system, system-ui, BlinkMacSystemFont, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Tahoma, sans-serif;
+  --roderuda-anim-duration: 0.3s;
+}
+
 
 .container {
   .luna-console {
     background: var(--background);
   }
 
-  @mixin luna-console-highlight {
-    .luna-console-key {
-      color: var(--var-color);
-    }
-    .luna-console-number {
-      color: var(--number-color);
-    }
-    .luna-console-null {
-      color: var(--operator-color);
-    }
-    .luna-console-string {
-      color: var(--string-color);
-    }
-    .luna-console-boolean {
-      color: var(--keyword-color);
-    }
-    .luna-console-special {
-      color: var(--operator-color);
-    }
-    .luna-console-keyword {
-      color: var(--keyword-color);
-    }
-    .luna-console-operator {
-      color: var(--operator-color);
-    }
-    .luna-console-comment {
-      color: var(--comment-color);
-    }
-  }
+  
 
   .luna-console-header {
     color: var(--link-color);
@@ -93,7 +73,15 @@
       }
     }
     .luna-console-code {
-      @include luna-console-highlight();
+      .luna-console-key { color: var(--var-color); }
+      .luna-console-number { color: var(--number-color); }
+      .luna-console-null { color: var(--operator-color); }
+      .luna-console-string { color: var(--string-color); }
+      .luna-console-boolean { color: var(--keyword-color); }
+      .luna-console-special { color: var(--operator-color); }
+      .luna-console-keyword { color: var(--keyword-color); }
+      .luna-console-operator { color: var(--operator-color); }
+      .luna-console-comment { color: var(--comment-color); }
     }
     .luna-console-log-content {
       .luna-console-undefined,
@@ -114,7 +102,15 @@
   }
 
   .luna-console-preview {
-    @include luna-console-highlight();
+    .luna-console-key { color: var(--var-color); }
+      .luna-console-number { color: var(--number-color); }
+      .luna-console-null { color: var(--operator-color); }
+      .luna-console-string { color: var(--string-color); }
+      .luna-console-boolean { color: var(--keyword-color); }
+      .luna-console-special { color: var(--operator-color); }
+      .luna-console-keyword { color: var(--keyword-color); }
+      .luna-console-operator { color: var(--operator-color); }
+      .luna-console-comment { color: var(--comment-color); }
   }
 
   .luna-object-viewer {
@@ -152,7 +148,7 @@
 
   .luna-notification {
     pointer-events: none !important;
-    padding: $padding;
+    padding: var(--roderuda-padding, 10px);
     z-index: 1000;
   }
 
@@ -351,7 +347,7 @@
     border: none;
     border-bottom: 1px solid var(--border);
     background: var(--background);
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     .luna-text-viewer-line-text {
       user-select: text;
       * {
@@ -386,7 +382,7 @@
   }
 
   .luna-setting-item-title {
-    font-size: $font-size;
+    font-size: var(--roderuda-font-size, 14px);
   }
 
   .luna-setting-item-separator {
@@ -466,4 +462,84 @@
     color: var(--foreground);
     background: var(--background);
   }
+}
+
+
+.container {
+  min-width: 320px;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999999;
+  color: var(--foreground);
+  font-family: var(--roderuda-font-family, -apple-system, system-ui, BlinkMacSystemFont, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Tahoma, sans-serif);
+  font-size: var(--roderuda-font-size, 14px);
+  direction: ltr;
+  &.dark {
+    color-scheme: dark;
+  }
+  * {
+    box-sizing: border-box;
+    pointer-events: all;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: none;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+  h2 {
+    font-size: var(--roderuda-font-size, 14px);
+    [class^='icon-'],
+    [class*=' icon-'] {
+      font-weight: normal;
+    }
+  }
+  &.inline {
+    position: static;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.icon-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default !important;
+  &:active {
+    color: inherit !important;
+  }
+}
+
+.tag-name-color {
+  color: var(--tag-name-color);
+}
+
+.function-color {
+  color: var(--function-color);
+}
+
+.attribute-name-color {
+  color: var(--attribute-name-color);
+}
+
+.operator-color {
+  color: var(--operator-color);
+}
+
+.string-color {
+  color: var(--string-color);
 }

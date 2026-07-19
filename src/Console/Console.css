@@ -1,5 +1,3 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #console {
   padding-top: 40px;
@@ -11,7 +9,31 @@
   }
   .control {
     padding: 10px 10px 10px 35px;
-    @include control();
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    left: 0;
+    top: 0;
+    cursor: default;
+    font-size: 0;
+    background: var(--darker-background);
+    color: var(--primary);
+    line-height: 20px;
+    border-bottom: 1px solid var(--border);
+    [class^='roderuda-icon-'],
+    [class*=' roderuda-icon-'] {
+      display: inline-block;
+      padding: 10px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &:active,
+      &.active {
+        color: var(--accent);
+      }
+    }
     .icon-clear {
       padding-right: 0px;
       left: 0;
@@ -24,13 +46,13 @@
     }
     .level {
       cursor: pointer;
-      font-size: $font-size-s;
+      font-size: var(--roderuda-font-size-s, 12px);
       height: 20px;
       display: inline-block;
       margin: 0 2px;
       padding: 0 4px;
       line-height: 20px;
-      transition: background-color $anim-duration, color $anim-duration;
+      transition: background-color var(--roderuda-anim-duration, 0.3s), color var(--roderuda-anim-duration, 0.3s);
       &.active {
         background: var(--highlight);
         color: var(--select-foreground);
@@ -43,7 +65,7 @@
       max-width: 80px;
       overflow: hidden;
       right: 55px;
-      font-size: $font-size;
+      font-size: var(--roderuda-font-size, 14px);
       text-overflow: ellipsis;
     }
   }
@@ -86,7 +108,7 @@
       height: 40px;
       color: var(--primary);
       background: var(--darker-background);
-      font-size: $font-size-s;
+      font-size: var(--roderuda-font-size-s, 12px);
       border-top: 1px solid var(--border);
       .button {
         pointer-events: all;
@@ -96,7 +118,7 @@
         border-right: 1px solid var(--border);
         height: 40px;
         line-height: 40px;
-        transition: background-color $anim-duration, color $anim-duration;
+        transition: background-color var(--roderuda-anim-duration, 0.3s), color var(--roderuda-anim-duration, 0.3s);
         &:last-child {
           border-right: none;
         }
@@ -113,7 +135,7 @@
       padding-left: 25px;
       outline: none;
       border: none;
-      font-size: $font-size;
+      font-size: var(--roderuda-font-size, 14px);
       width: 100%;
       height: 100%;
       user-select: text;
@@ -125,20 +147,20 @@
 }
 
 .safe-area #console {
-  @include safe-area(padding-bottom, 24px);
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
   &.js-input-hidden {
     padding-bottom: 0;
   }
   .js-input {
-    @include safe-area(height, 24px);
+    height: calc(24px + env(safe-area-inset-bottom));
     &.active {
       height: 100%;
-      @include safe-area(padding-bottom, 40px);
+      padding-bottom: calc(40px + env(safe-area-inset-bottom));
     }
     .buttons {
-      @include safe-area(height, 40px);
+      height: calc(40px + env(safe-area-inset-bottom));
       .button {
-        @include safe-area(height, 40px);
+        height: calc(40px + env(safe-area-inset-bottom));
       }
     }
   }

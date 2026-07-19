@@ -35,13 +35,13 @@ import lunaObjectViewerCss from 'luna-object-viewer/luna-object-viewer.css'
 import lunaDomViewerCss from 'luna-dom-viewer/luna-dom-viewer.css'
 import lunaTextViewerCss from 'luna-text-viewer/luna-text-viewer.css'
 import lunaNotificationCss from 'luna-notification/luna-notification.css'
-import styleResetScss from './style/reset.scss'
+import styleResetScss from './style/reset.css'
 import lunaDataGridCss from 'luna-data-grid/luna-data-grid.css'
 import lunaModalCss from 'luna-modal/luna-modal.css'
 import lunaTabCss from 'luna-tab/luna-tab.css'
 import lunaSettingCss from 'luna-setting/luna-setting.css'
 import lunaBoxModelCss from 'luna-box-model/luna-box-model.css'
-import styleStyleScss from './style/style.scss'
+import styleStyleScss from './style/style.css'
 
 export default {
   init({

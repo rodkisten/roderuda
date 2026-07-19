@@ -1,13 +1,13 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #sources {
   font-size: 0;
-  @include overflow-auto(y);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   color: var(--foreground);
   .code-wrapper,
   .raw-wrapper {
-    @include overflow-auto(x);
+    overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
     width: 100%;
     min-height: 100%;
   }
@@ -36,9 +36,17 @@
     }
   }
   .image {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     .breadcrumb {
-      @include breadcrumb();
+      background: var(--darker-background);
+      color: var(--primary);
+      user-select: text;
+      margin-bottom: 10px;
+      word-break: break-all;
+      padding: var(--roderuda-padding, 10px);
+      font-size: var(--roderuda-font-size-l, 16px);
+      min-height: 40px;
+      border-bottom: 1px solid var(--border);
     }
     .img-container {
       text-align: center;
@@ -53,7 +61,7 @@
     }
   }
   .json {
-    padding: 0 $padding;
+    padding: 0 var(--roderuda-padding, 10px);
     * {
       user-select: text;
     }

@@ -137,7 +137,7 @@ export default class Console extends Tool {
   _appendTpl() {
     const $el = this._$el
 
-    this._style = evalCss(require('./Console.scss'))
+    this._style = evalCss(require('./Console.css'))
     $el.append(
       c(`
       <div class="control">

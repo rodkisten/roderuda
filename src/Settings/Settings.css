@@ -1,0 +1,9 @@
+
+#settings {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.safe-area #settings {
+  padding-bottom: calc(0px + env(safe-area-inset-bottom));
+}

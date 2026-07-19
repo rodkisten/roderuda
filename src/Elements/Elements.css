@@ -1,19 +1,45 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #elements {
   .dom-viewer {
     user-select: auto !important;
   }
   .elements {
-    @include absolute();
+    position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
     padding-top: 40px;
     padding-bottom: 24px;
     font-size: 14px;
   }
   .control {
     padding: 10px 0;
-    @include control();
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    left: 0;
+    top: 0;
+    cursor: default;
+    font-size: 0;
+    background: var(--darker-background);
+    color: var(--primary);
+    line-height: 20px;
+    border-bottom: 1px solid var(--border);
+    [class^='roderuda-icon-'],
+    [class*=' roderuda-icon-'] {
+      display: inline-block;
+      padding: 10px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &:active,
+      &.active {
+        color: var(--accent);
+      }
+    }
     .icon-eye {
       right: 0;
     }
@@ -25,19 +51,24 @@
     }
   }
   .dom-viewer-container {
-    @include overflow-auto();
+    overflow: auto;
+  -webkit-overflow-scrolling: touch;
     height: 100%;
     padding: 5px 0;
   }
   .crumbs {
-    @include absolute(100%, 24px);
+    position: absolute;
+  width: 100%;
+  height: 24px;
+  left: 0;
+  top: 0;
     top: initial;
     line-height: 24px;
     bottom: 0;
     border-top: 1px solid var(--border);
     background: var(--darker-background);
     color: var(--primary);
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -52,7 +83,11 @@
     }
   }
   .detail {
-    @include absolute();
+    position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
     z-index: 10;
     padding-top: 40px;
     display: none;
@@ -60,7 +95,7 @@
     .control {
       padding: 10px 35px;
       .element-name {
-        font-size: $font-size-s;
+        font-size: var(--roderuda-font-size-s, 12px);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -75,7 +110,8 @@
       }
     }
     .element {
-      @include overflow-auto(y);
+      overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
       height: 100%;
     }
   }
@@ -87,11 +123,37 @@
       color: var(--primary);
       background: var(--darker-background);
       border-top: 1px solid var(--border);
-      padding: $padding;
+      padding: var(--roderuda-padding, 10px);
       line-height: 18px;
-      font-size: $font-size;
-      transition: background-color $anim-duration;
-      @include right-btn();
+      font-size: var(--roderuda-font-size, 14px);
+      transition: background-color var(--roderuda-anim-duration, 0.3s);
+      .btn {
+      margin-left: 5px;
+      float: right;
+      color: var(--primary);
+      width: 18px;
+      height: 18px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      font-weight: normal;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &.filter-text {
+        width: auto;
+        max-width: 80px;
+        font-size: var(--roderuda-font-size, 14px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+      }
+      &:active { color: var(--accent); }
+      &.btn-disabled {
+        color: inherit !important;
+        cursor: default !important;
+        pointer-events: none;
+        opacity: 0.5;
+        * { pointer-events: none; }
+      }
+    }
       &.active-effect {
         cursor: pointer;
       }
@@ -102,12 +164,13 @@
     }
   }
   .attributes {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     a {
       color: var(--link-color);
     }
     .table-wrapper {
-      @include overflow-auto(x);
+      overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
     }
     table {
       td {
@@ -118,8 +181,9 @@
   .text-content {
     background: #fff;
     .content {
-      @include overflow-auto(x);
-      padding: $padding;
+      overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+      padding: var(--roderuda-padding, 10px);
     }
   }
   .style-color {
@@ -133,18 +197,20 @@
     display: inline-block;
   }
   .box-model {
-    @include overflow-auto(x);
-    padding: $padding;
+    overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+    padding: var(--roderuda-padding, 10px);
     text-align: center;
     border-bottom: 1px solid var(--color);
   }
   .computed-style {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     a {
       color: var(--link-color);
     }
     .table-wrapper {
-      @include overflow-auto(y);
+      overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
       max-height: 200px;
       border-top: 1px solid var(--border);
     }
@@ -159,12 +225,12 @@
     }
   }
   .styles {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     .style-wrapper {
-      padding: $padding;
+      padding: var(--roderuda-padding, 10px);
       .style-rules {
         border: 1px solid var(--border);
-        padding: $padding;
+        padding: var(--roderuda-padding, 10px);
         margin-bottom: 10px;
         .rule {
           padding-left: 2em;
@@ -183,22 +249,23 @@
     }
   }
   .listeners {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     .listener-wrapper {
-      padding: $padding;
+      padding: var(--roderuda-padding, 10px);
       .listener {
         margin-bottom: 10px;
         overflow: hidden;
         border: 1px solid var(--border);
         .listener-type {
-          padding: $padding;
+          padding: var(--roderuda-padding, 10px);
           background: var(--darker-background);
           color: var(--primary);
         }
         .listener-content {
           li {
-            @include overflow-auto(x);
-            padding: $padding;
+            overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+            padding: var(--roderuda-padding, 10px);
             border-top: none;
           }
         }
@@ -209,13 +276,13 @@
 
 .safe-area #elements {
   .elements {
-    @include safe-area(padding-bottom, 24px);
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
   }
   .crumbs {
-    @include safe-area(height, 24px);
+    height: calc(24px + env(safe-area-inset-bottom));
   }
   .element {
-    @include safe-area(padding-bottom, 0px);
+    padding-bottom: calc(0px + env(safe-area-inset-bottom));
   }
 }
 
