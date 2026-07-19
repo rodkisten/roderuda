@@ -13,6 +13,44 @@ const pkg = require('./package.json')
 // Luna component classes (luna-*) are left untouched.
 const SELECTOR_RE = /\.(-?[a-zA-Z_][a-zA-Z0-9_-]*)/g
 
+
+const nesting = {
+  postcssPlugin: 'inline-nesting',
+  OnceExit(root, { Rule }) {
+    let changed = true
+    while (changed) {
+      changed = false
+      const nestedRules = []
+      root.walkRules((rule) => {
+        const parent = rule.parent
+        if (parent && parent.type === 'rule') nestedRules.push(rule)
+      })
+      for (const rule of nestedRules) {
+        const parent = rule.parent
+        if (!parent || parent.type !== 'rule' || !parent.parent) continue
+        const parentSelectors = parent.selectors || parent.selector.split(',')
+        const childSelectors = rule.selectors || rule.selector.split(',')
+        const selectors = []
+        for (const parentSelector of parentSelectors) {
+          for (const childSelector of childSelectors) {
+            const child = childSelector.trim()
+            selectors.push(
+              child.includes('&')
+                ? child.replace(/&/g, parentSelector.trim())
+                : `${parentSelector.trim()} ${child}`
+            )
+          }
+        }
+        const flattened = new Rule({ selector: selectors.join(', ') })
+        flattened.append(rule.nodes.map((node) => node.clone()))
+        parent.after(flattened)
+        rule.remove()
+        changed = true
+      }
+    }
+  },
+}
+
 const inlinePrefixer = {
   postcssPlugin: 'inline-prefix',
   Rule(rule) {
@@ -23,7 +61,7 @@ const inlinePrefixer = {
   },
 }
 
-const postcssPlugins = [inlinePrefixer, autoprefixer()]
+const postcssPlugins = [nesting, inlinePrefixer, autoprefixer()]
 
 /**
  * Process raw CSS through the PostCSS pipeline.

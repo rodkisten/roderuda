@@ -1,191 +1,207 @@
-#network .network {
-  position: absolute;
+
+#network {
+  .network {
+    position: absolute;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
-  padding-top: 39px;
-}
-#network .control {
-  padding: 10px;
-  border-bottom: none;
-  position: absolute;
-  width: 100%;
-  height: 40px;
-  left: 0;
-  top: 0;
-  cursor: default;
-  font-size: 0;
-  background: var(--darker-background);
-  color: var(--primary);
-  line-height: 20px;
-  border-bottom: 1px solid var(--border);
-}
-#network .control [class^=roderuda-icon-],
-#network .control [class*=" roderuda-icon-"] {
-  display: inline-block;
-  padding: 10px;
-  font-size: 16px;
-  position: absolute;
-  top: 0;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-#network .control [class^=roderuda-icon-]:active, #network .control [class^=roderuda-icon-].active,
-#network .control [class*=" roderuda-icon-"]:active,
-#network .control [class*=" roderuda-icon-"].active {
-  color: var(--accent);
-}
-#network .control .title {
-  font-size: 14px;
-}
-#network .control .icon-clear {
-  left: 23px;
-}
-#network .control .icon-eye {
-  right: 0;
-}
-#network .control .icon-copy {
-  right: 23px;
-}
-#network .control .icon-filter {
-  right: 46px;
-}
-#network .control .filter-text {
-  white-space: nowrap;
-  position: absolute;
-  line-height: 20px;
-  max-width: 80px;
-  overflow: hidden;
-  right: 88px;
-  font-size: 14px;
-  text-overflow: ellipsis;
-}
-#network .control .icon-record {
-  left: 0;
-}
-#network .control .icon-record.recording {
-  color: var(--console-error-foreground);
-  text-shadow: 0 0 4px var(--console-error-foreground);
-}
-#network .request-error {
-  color: var(--console-error-foreground);
-}
-#network .luna-data-grid:focus .luna-data-grid-data-container .request-error.luna-data-grid-selected {
-  background: var(--console-error-background);
-}
-#network .luna-data-grid {
-  border-left: none;
-  border-right: none;
-}
-#network .detail {
-  position: absolute;
+    padding-top: 39px;
+  }
+  .control {
+    padding: 10px;
+    border-bottom: none;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    left: 0;
+    top: 0;
+    cursor: default;
+    font-size: 0;
+    background: var(--darker-background);
+    color: var(--primary);
+    line-height: 20px;
+    border-bottom: 1px solid var(--border);
+    [class^='roderuda-icon-'],
+    [class*=' roderuda-icon-'] {
+      display: inline-block;
+      padding: 10px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &:active,
+      &.active {
+        color: var(--accent);
+      }
+    }
+    .title {
+      font-size: var(--roderuda-font-size, 14px);
+    }
+    .icon-clear {
+      left: 23px;
+    }
+    .icon-eye {
+      right: 0;
+    }
+    .icon-copy {
+      right: 23px;
+    }
+    .icon-filter {
+      right: 46px;
+    }
+    .filter-text {
+      white-space: nowrap;
+      position: absolute;
+      line-height: 20px;
+      max-width: 80px;
+      overflow: hidden;
+      right: 88px;
+      font-size: var(--roderuda-font-size, 14px);
+      text-overflow: ellipsis;
+    }
+    .icon-record {
+      left: 0;
+      &.recording {
+        color: var(--console-error-foreground);
+        text-shadow: 0 0 4px var(--console-error-foreground);
+      }
+    }
+  }
+  .request-error {
+    color: var(--console-error-foreground);
+  }
+  .luna-data-grid:focus {
+    .luna-data-grid-data-container {
+      .request-error.luna-data-grid-selected {
+        background: var(--console-error-background);
+      }
+    }
+  }
+  .luna-data-grid {
+    border-left: none;
+    border-right: none;
+  }
+  .detail {
+    position: absolute;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 10;
-  display: none;
-  padding-top: 40px;
-  background: var(--background);
-}
-#network .detail .control {
-  padding: 10px 35px;
-  border-bottom: 1px solid var(--border);
-}
-#network .detail .control .url {
-  font-size: 12px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 100%;
-  display: inline-block;
-}
-#network .detail .control .icon-left {
-  left: 0;
-}
-#network .detail .control .icon-delete {
-  left: 0;
-  display: none;
-}
-#network .detail .control .icon-copy {
-  right: 0;
-}
-#network .detail .http {
-  overflow-y: auto;
+    z-index: 10;
+    display: none;
+    padding-top: 40px;
+    background: var(--background);
+    .control {
+      padding: 10px 35px;
+      border-bottom: 1px solid var(--border);
+      .url {
+        font-size: var(--roderuda-font-size-s, 12px);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        display: inline-block;
+      }
+      .icon-left {
+        left: 0;
+      }
+      .icon-delete {
+        left: 0;
+        display: none;
+      }
+      .icon-copy {
+        right: 0;
+      }
+    }
+    .http {
+      overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  height: 100%;
-}
-#network .detail .http .section {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-#network .detail .http .section h2 {
-  background: var(--darker-background);
-  color: var(--primary);
-  padding: 10px;
-  line-height: 18px;
-  font-size: 14px;
-}
-#network .detail .http .section table {
-  color: var(--foreground);
-}
-#network .detail .http .section table * {
-  user-select: text;
-}
-#network .detail .http .section table td {
-  font-size: 12px;
-  padding: 5px 10px;
-  word-break: break-all;
-}
-#network .detail .http .section table .key {
-  white-space: nowrap;
-  font-weight: bold;
-  color: var(--accent);
-}
-#network .detail .http .response,
-#network .detail .http .data {
-  user-select: text;
-  overflow-x: auto;
+      height: 100%;
+      .section {
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        h2 {
+          background: var(--darker-background);
+          color: var(--primary);
+          padding: var(--roderuda-padding, 10px);
+          line-height: 18px;
+          font-size: var(--roderuda-font-size, 14px);
+        }
+        table {
+          color: var(--foreground);
+          * {
+            user-select: text;
+          }
+          td {
+            font-size: var(--roderuda-font-size-s, 12px);
+            padding: 5px 10px;
+            word-break: break-all;
+          }
+          .key {
+            white-space: nowrap;
+            font-weight: bold;
+            color: var(--accent);
+          }
+        }
+      }
+      .response,
+      .data {
+        user-select: text;
+        overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 10px;
-  font-size: 12px;
-  margin: 10px 0;
-  white-space: pre-wrap;
-  border-top: 1px solid var(--border);
-  color: var(--foreground);
-  border-bottom: 1px solid var(--border);
+        padding: var(--roderuda-padding, 10px);
+        font-size: var(--roderuda-font-size-s, 12px);
+        margin: 10px 0;
+        white-space: pre-wrap;
+        border-top: 1px solid var(--border);
+        color: var(--foreground);
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  }
 }
 
-.safe-area #network .http {
-  padding-bottom: calc(0px + env(safe-area-inset-bottom));
+.safe-area #network {
+  .http {
+    padding-bottom: calc(0px + env(safe-area-inset-bottom));
+  }
 }
 
 @media screen and (min-width: 680px) {
-  #network .network .control .icon-eye {
-    display: none;
-  }
-  #network .network .control .icon-copy {
-    right: 0;
-  }
-  #network .network .control .icon-filter {
-    right: 23px;
-  }
-  #network .network .control .filter-text {
-    right: 55px;
-  }
-  #network .detail {
-    width: 50%;
-    left: initial;
-    right: 0;
-    border-left: 1px solid var(--border);
-  }
-  #network .detail .control .icon-left {
-    display: none;
-  }
-  #network .detail .control .icon-delete {
-    display: block;
+  #network {
+    .network {
+      .control {
+        .icon-eye {
+          display: none;
+        }
+        .icon-copy {
+          right: 0;
+        }
+        .icon-filter {
+          right: 23px;
+        }
+        .filter-text {
+          right: 55px;
+        }
+      }
+    }
+    .detail {
+      width: 50%;
+      left: initial;
+      right: 0;
+      border-left: 1px solid var(--border);
+      .control {
+        .icon-left {
+          display: none;
+        }
+        .icon-delete {
+          display: block;
+        }
+      }
+    }
   }
 }
