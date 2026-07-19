@@ -33,6 +33,10 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Vite Build
+        run: pnpm build:build
+        continue-on-error: true
+
       - name: Build
         run: pnpm build
 
