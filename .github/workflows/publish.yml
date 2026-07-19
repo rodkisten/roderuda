@@ -114,12 +114,15 @@ jobs:
           name: roderuda-dist
           path: dist/
      
-      - name: Verify dist files
+      - name: Verify dist files (again)
         run: |
           test -f dist/roderuda.js
           test -f dist/roderuda.min.js
           test -f dist/roderuda.with-comments.js
-
+         
+          echo "=== All files (recursive) ==="
+          find . -type f
+          
       - name: Upload built files to Gist
         uses: exuanbo/actions-deploy-gist@v1
         with:
