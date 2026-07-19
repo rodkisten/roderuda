@@ -119,5 +119,5 @@ jobs:
         with:
           token: ${{ secrets.GIST_TOKEN }}
           gist_id: ${{ vars.GIST_ID }}
-          file_path: dist/
+          file_path: dist/roderuda.min.js
           file_type: text
