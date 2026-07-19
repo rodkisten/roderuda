@@ -52,6 +52,34 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      # BUILD_INFO is exported before the build so build tools, Vite config,
+      # and other scripts can access it through process.env.BUILD_INFO.
+      - name: Prepare build info
+        id: metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_DATE="$(
+            TZ=Etc/GMT+3 \
+              date '+%d/%m/%Y %H:%M:%S GMT-3'
+          )"
+
+          SHORT_SHA="${GITHUB_SHA::7}"
+          BUILD_INFO="${BUILD_DATE} | commit ${GITHUB_SHA}"
+
+          {
+            echo "BUILD_INFO=${BUILD_INFO}"
+          } >> "$GITHUB_ENV"
+
+          {
+            echo "date=${BUILD_DATE}"
+            echo "short_sha=${SHORT_SHA}"
+            echo "build_info=${BUILD_INFO}"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "BUILD_INFO=${BUILD_INFO}"
+
       - name: Build
         run: pnpm build
 
@@ -80,34 +108,19 @@ jobs:
           du -h "${required_files[@]}"
 
       - name: Generate build metadata
-        id: metadata
         shell: bash
         run: |
           set -euo pipefail
 
-          BUILD_DATE="$(
-            TZ=America/Sao_Paulo \
-              date '+%d/%m/%Y %H:%M:%S GMT-3'
-          )"
-
-          SHORT_SHA="${GITHUB_SHA::7}"
-
           cat > dist/build.json <<JSON
           {
             "commit": "${GITHUB_SHA}",
-            "commitShort": "${SHORT_SHA}",
-            "builtAt": "${BUILD_DATE}",
-            "timezone": "GMT-3"
+            "commitShort": "${{ steps.metadata.outputs.short_sha }}",
+            "builtAt": "${{ steps.metadata.outputs.date }}",
+            "timezone": "GMT-3",
+            "buildInfo": "${BUILD_INFO}"
           }
           JSON
-
-          {
-            echo "date=${BUILD_DATE}"
-            echo "short_sha=${SHORT_SHA}"
-          } >> "$GITHUB_OUTPUT"
-
-          echo "Build: ${SHORT_SHA}"
-          echo "Date:  ${BUILD_DATE}"
 
       - name: Prepare GitHub Pages
         shell: bash
@@ -224,8 +237,6 @@ jobs:
       - name: Update Gist
         env:
           GH_TOKEN: ${{ secrets.GIST_TOKEN }}
-          BUILD_DATE: ${{ steps.metadata.outputs.date }}
-          SHORT_SHA: ${{ steps.metadata.outputs.short_sha }}
         shell: bash
         run: |
           set -euo pipefail
@@ -240,7 +251,7 @@ jobs:
           jq \
             --null-input \
             --arg description \
-              "RodEruda build ${SHORT_SHA} | ${BUILD_DATE}" \
+              "RodEruda | ${BUILD_INFO}" \
             --rawfile roderuda \
               dist/roderuda.js \
             --rawfile roderuda_min \
@@ -266,9 +277,7 @@ jobs:
               "gists/${GIST_ID}" \
               --input -
 
-          echo "Gist updated:"
-          echo "  commit: ${GITHUB_SHA}"
-          echo "  date:   ${BUILD_DATE}"
+          echo "Gist updated: ${BUILD_INFO}"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
