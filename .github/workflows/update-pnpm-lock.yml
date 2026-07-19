@@ -15,13 +15,25 @@ on:
 
   workflow_dispatch:
     inputs:
-      commit_message:
-        description: "Commit message for the updated lockfile"
+      package:
+        description: "Package to install, e.g. react, vite@latest or @types/node@^24"
         required: false
-        default: "chore(deps): update pnpm lockfile"
+        default: ""
         type: string
 
-# The workflow commits directly to the branch selected in the Actions UI.
+      dev_dependency:
+        description: "Install package as devDependency"
+        required: false
+        default: false
+        type: boolean
+
+      commit_message:
+        description: "Commit message (leave empty to generate automatically)"
+        required: false
+        default: ""
+        type: string
+
+# The workflow commits directly to the selected branch.
 permissions:
   contents: write
 
@@ -31,7 +43,7 @@ concurrency:
 
 jobs:
   update-lockfile:
-    name: 📦 Update and commit lockfile
+    name: 📦 Update dependencies and lockfile
     runs-on: ubuntu-24.04
     timeout-minutes: 5
 
@@ -54,7 +66,8 @@ jobs:
         with:
           node-version: 24
 
-          # Lockfile generation intentionally uses an isolated pnpm store.
+          # This workflow intentionally generates dependency metadata
+          # without reusing the caches from build or CI workflows.
           package-manager-cache: false
 
       - name: 🧹 Configure isolated pnpm store
@@ -62,8 +75,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Each execution gets a fresh pnpm store. No dependency cache
-          # is restored or shared with CI or publishing workflows.
+          # Every execution gets a fresh pnpm store.
           STORE_DIR="$RUNNER_TEMP/pnpm-store-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
 
           pnpm config set store-dir "$STORE_DIR"
@@ -72,47 +84,121 @@ jobs:
           echo "🟢 Node: $(node --version)"
           echo "📦 pnpm: $(pnpm --version)"
 
-      - name: 🔐 Generate pnpm lockfile
+      - name: 📦 Add dependency or update lockfile
+        id: dependency
         shell: bash
+        env:
+          PACKAGE: ${{ inputs.package }}
+          DEV_DEPENDENCY: ${{ inputs.dev_dependency }}
         run: |
           set -euo pipefail
 
-          # Only resolve and update the lockfile. There is no reason to
-          # materialize node_modules when this workflow only commits the lockfile.
+          # A package is only provided during a manual workflow_dispatch.
+          # Push-triggered runs simply synchronize the existing lockfile.
+          if [[ -n "${PACKAGE:-}" ]]; then
+            ADD_ARGS=()
+
+            # pnpm prevents accidental additions to a workspace root.
+            # Explicitly target the root when this repository is a workspace.
+            if [[ -f "pnpm-workspace.yaml" ]]; then
+              ADD_ARGS+=(--workspace-root)
+            fi
+
+            if [[ "${DEV_DEPENDENCY:-false}" == "true" ]]; then
+              ADD_ARGS+=(--save-dev)
+
+              echo "🧪 Adding devDependency: ${PACKAGE}"
+              echo "dependency_type=devDependency" >> "$GITHUB_OUTPUT"
+            else
+              echo "📦 Adding dependency: ${PACKAGE}"
+              echo "dependency_type=dependency" >> "$GITHUB_OUTPUT"
+            fi
+
+            # Bash arrays preserve argument boundaries and prevent the package
+            # input from being interpreted as arbitrary shell commands.
+            pnpm add \
+              "${ADD_ARGS[@]}" \
+              "$PACKAGE"
+
+            echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
+            echo "package_added=true" >> "$GITHUB_OUTPUT"
+
+            exit 0
+          fi
+
+          echo "🔐 No package requested. Synchronizing pnpm-lock.yaml."
+
+          # Only resolve the dependency graph and update the lockfile.
+          # node_modules does not need to be materialized in this mode.
           pnpm install \
             --lockfile-only \
             --no-frozen-lockfile
 
-      - name: 🔎 Check lockfile changes
-        id: lockfile
+          echo "package_added=false" >> "$GITHUB_OUTPUT"
+
+      - name: 🔎 Check dependency changes
+        id: changes
         shell: bash
         run: |
           set -euo pipefail
 
-          if git diff --quiet -- pnpm-lock.yaml; then
+          # git status detects both tracked changes and newly created files,
+          # unlike git diff alone, which ignores untracked files.
+          CHANGES="$(
+            git status \
+              --porcelain \
+              -- \
+              package.json \
+              pnpm-lock.yaml
+          )"
+
+          if [[ -z "$CHANGES" ]]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "✅ pnpm-lock.yaml is already up to date."
+            echo "✅ Dependencies and pnpm-lock.yaml are already up to date."
+
             exit 0
           fi
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "📝 pnpm-lock.yaml was updated."
 
-          git diff --stat -- pnpm-lock.yaml
+          echo "📝 Dependency files changed:"
+          echo "$CHANGES"
 
-      - name: 💾 Commit updated lockfile
-        if: steps.lockfile.outputs.changed == 'true'
+          echo ""
+          echo "📊 Diff summary:"
+
+          git diff \
+            --stat \
+            -- \
+            package.json \
+            pnpm-lock.yaml \
+            || true
+
+      - name: 💾 Commit dependency changes
+        if: steps.changes.outputs.changed == 'true'
         shell: bash
         env:
-          INPUT_COMMIT_MESSAGE: ${{ github.event.inputs.commit_message }}
+          INPUT_COMMIT_MESSAGE: ${{ inputs.commit_message }}
+          PACKAGE: ${{ inputs.package }}
+          DEV_DEPENDENCY: ${{ inputs.dev_dependency }}
         run: |
           set -euo pipefail
 
-          # workflow_dispatch provides the custom/default input.
-          # Push events do not have this input, so use the standard fallback.
-          COMMIT_MESSAGE="${
-            INPUT_COMMIT_MESSAGE:-chore(deps): update pnpm lockfile
-          }"
+          COMMIT_MESSAGE="${INPUT_COMMIT_MESSAGE:-}"
+
+          # Generate a meaningful commit message when the manual input
+          # was left empty.
+          if [[ -z "$COMMIT_MESSAGE" ]]; then
+            if [[ -n "${PACKAGE:-}" ]]; then
+              if [[ "${DEV_DEPENDENCY:-false}" == "true" ]]; then
+                COMMIT_MESSAGE="chore(dev-deps): add ${PACKAGE}"
+              else
+                COMMIT_MESSAGE="chore(deps): add ${PACKAGE}"
+              fi
+            else
+              COMMIT_MESSAGE="chore(deps): update pnpm lockfile"
+            fi
+          fi
 
           git config \
             user.name \
@@ -122,13 +208,17 @@ jobs:
             user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add pnpm-lock.yaml
+          # pnpm add can modify both package.json and pnpm-lock.yaml.
+          # A lockfile-only update normally changes only pnpm-lock.yaml.
+          git add \
+            package.json \
+            pnpm-lock.yaml
 
           git commit \
             -m "$COMMIT_MESSAGE"
 
-      - name: 🚀 Push updated lockfile
-        if: steps.lockfile.outputs.changed == 'true'
+      - name: 🚀 Push dependency changes
+        if: steps.changes.outputs.changed == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -138,6 +228,6 @@ jobs:
             "HEAD:${{ github.ref_name }}"
 
       - name: ✨ Nothing to update
-        if: steps.lockfile.outputs.changed != 'true'
+        if: steps.changes.outputs.changed != 'true'
         run: |
-          echo "The lockfile is already synchronized with package manifests."
+          echo "Dependencies and pnpm-lock.yaml are already synchronized."
