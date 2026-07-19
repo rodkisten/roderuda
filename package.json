@@ -3,7 +3,7 @@
   "version": "3.4.3",
   "description": "Console for Mobile Browsers (RodEruda fork)",
   "main": "roderuda.js",
-  "packageManager": "pnpm@11.5.0",
+  "packageManager": "pnpm@11.7.0",
   "engines": {
     "node": ">=24.0.0"
   },
