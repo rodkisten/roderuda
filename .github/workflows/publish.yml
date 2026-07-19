@@ -55,6 +55,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Vite Build
+        run: pnpm build:vite
+
       - name: Verify build
         shell: bash
         run: |
