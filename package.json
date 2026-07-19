@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "ci": "pnpm run lint && pnpm run test && pnpm run build",
+    "build:vite": "vite build",
     "build": "node build/clean.js && tsdown && node build/build.js",
     "build:min": "node build/clean.js && tsdown --minify && node build/build.js",
     "build:dev": "node build/clean.js && cross-env NODE_ENV=development tsdown && node build/build.js",
@@ -88,7 +89,8 @@
     "sass": "^1.77.6",
     "sass-loader": "^14.2.1",
     "tsdown": "^0.12.9",
-    "typescript": "^5.9.3",
+    "typescript": "^6",
+    "vite": "^8.1.4",
     "webpack": "^5.92.1",
     "webpack-bundle-analyzer": "^4.7.0",
     "webpack-cli": "^5.1.4",
