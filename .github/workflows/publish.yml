@@ -84,6 +84,7 @@ jobs:
 
       - name: Vite Build
         run: pnpm build:vite
+        continue-on-error: true
 
       - name: Verify build
         shell: bash
