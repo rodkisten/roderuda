@@ -90,7 +90,12 @@ const cssAsString = () => ({
       readFileSync(filePath, 'utf8'),
       { from: filePath }
     )
-    return `export default ${JSON.stringify(result.css)};`
+    const serializedCss = JSON.stringify(result.css)
+    return `const css = ${serializedCss};
+export default css;
+export const replace = (...args) => css.replace(...args);
+export const toString = () => css;
+export const valueOf = () => css;`
   },
 })
 

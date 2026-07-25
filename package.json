@@ -1,6 +1,6 @@
 {
   "name": "roderuda",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "description": "Console for Mobile Browsers (RodEruda fork)",
   "main": "roderuda.js",
   "packageManager": "pnpm@11.7.0",

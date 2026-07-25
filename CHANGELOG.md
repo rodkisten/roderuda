@@ -1,3 +1,8 @@
+# 3.4.4 / 2026-07-25
+
+- Fixed CSS string interoperability in tsdown and Vite bundles. CommonJS Luna packages can now call `.replace()` on imported CSS modules without crashing the injected devtools.
+- Added string coercion helpers to generated CSS modules so concatenation and legacy `require()` consumers continue to work.
+
 ## 3.4.3 (15 Jun 2025)
 
 * fix: redundant code imported

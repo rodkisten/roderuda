@@ -90,7 +90,15 @@ function cssStringPlugin() {
       if (id.endsWith('.css') && !id.includes('.css.map')) {
         const rawCss = readFileSync(id, 'utf8')
         const css = await processCssContent(rawCss, id)
-        return { code: `export default ${JSON.stringify(css)};`, map: null }
+        const serializedCss = JSON.stringify(css)
+        return {
+          code: `const css = ${serializedCss};
+export default css;
+export const replace = (...args) => css.replace(...args);
+export const toString = () => css;
+export const valueOf = () => css;`,
+          map: null,
+        }
       }
     },
   }
