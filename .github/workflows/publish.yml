@@ -153,7 +153,7 @@ jobs:
             dist/roderuda.min.js \
             dist/roderuda.with-comments.js \
             dist/build.json \
-            index.html \
+            dist/index.html \
             pages/roderuda/
 
           optional_files=(
