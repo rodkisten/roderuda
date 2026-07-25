@@ -170,8 +170,11 @@ jobs:
 
           # This file must exist, but it is intentionally empty.
           touch pages/.nojekyll
-
-          cp pages/index.html pages/roderuda/index.html
+        
+          pwd
+          find | sed 's|[^/]*/|- |g'
+           
+          cp index.html pages/roderuda/index.html
 
       - name: Verify GitHub Pages directory
         shell: bash
