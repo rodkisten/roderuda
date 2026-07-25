@@ -257,6 +257,7 @@ export default class Sources extends Tool {
     // Need setTimeout to make it work
     setTimeout(() => (this._$el.get(0).scrollTop = 0), 0)
   }
+}
 
 function resolveHighlight() {
   const candidate =
