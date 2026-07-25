@@ -60,7 +60,7 @@ jobs:
           set -euo pipefail
 
           BUILD_DATE="$(
-            TZ=America/Sao_Paulo \
+            TZ=Etc/GMT+3 \
               date '+%d/%m/%Y %H:%M:%S GMT-3'
           )"
 
@@ -167,6 +167,7 @@ jobs:
             fi
           done
 
+          # This file must exist, but it is intentionally empty.
           touch pages/.nojekyll
 
           cat > pages/index.html <<'HTML'
@@ -174,11 +175,17 @@ jobs:
           <html lang="en">
           <head>
             <meta charset="UTF-8">
+
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1.0"
             >
-            <meta http-equiv="refresh" content="0; url=./roderuda/">
+
+            <meta
+              http-equiv="refresh"
+              content="0; url=./roderuda/"
+            >
+
             <title>RodEruda CDN</title>
           </head>
 
@@ -196,6 +203,7 @@ jobs:
           <html lang="en">
           <head>
             <meta charset="UTF-8">
+
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1.0"
@@ -264,19 +272,25 @@ jobs:
 
             <p>
               Console for mobile browsers, based on
-              <a href="https://github.com/liriliri/eruda">Eruda</a>.
+              <a href="https://github.com/liriliri/eruda">
+                Eruda
+              </a>.
             </p>
 
             <h2>Files</h2>
 
             <ul>
               <li>
-                <a href="./roderuda.js">roderuda.js</a>
+                <a href="./roderuda.js">
+                  roderuda.js
+                </a>
                 — non-minified bundle
               </li>
 
               <li>
-                <a href="./roderuda.min.js">roderuda.min.js</a>
+                <a href="./roderuda.min.js">
+                  roderuda.min.js
+                </a>
                 — minified bundle
               </li>
 
@@ -288,7 +302,9 @@ jobs:
               </li>
 
               <li>
-                <a href="./build.json">build.json</a>
+                <a href="./build.json">
+                  build.json
+                </a>
                 — build metadata
               </li>
             </ul>
@@ -328,9 +344,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          required_pages_files=(
+          required_non_empty_files=(
             "pages/index.html"
-            "pages/.nojekyll"
             "pages/roderuda/index.html"
             "pages/roderuda/roderuda.js"
             "pages/roderuda/roderuda.min.js"
@@ -338,27 +353,54 @@ jobs:
             "pages/roderuda/build.json"
           )
 
-          for file in "${required_pages_files[@]}"; do
-            if [[ ! -e "$file" ]]; then
-              echo "::error file=${file}::Pages file was not generated"
+          required_existing_files=(
+            "pages/.nojekyll"
+          )
+
+          for file in "${required_non_empty_files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "::error file=${file}::Required Pages file does not exist"
               exit 1
             fi
 
-            if [[ -f "$file" && ! -s "$file" ]]; then
-              echo "::error file=${file}::Pages file is empty"
+            if [[ ! -s "$file" ]]; then
+              echo "::error file=${file}::Required Pages file is empty"
               exit 1
             fi
           done
 
-          echo "GitHub Pages directory:"
+          for file in "${required_existing_files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "::error file=${file}::Required Pages marker does not exist"
+              exit 1
+            fi
+          done
+
+          echo "GitHub Pages directory contents:"
+
           find pages \
             -type f \
             -printf '%p (%s bytes)\n' \
             | sort
 
           echo
-          echo "Total Pages size:"
+          echo "Total Pages directory size:"
           du -sh pages
+
+          echo
+          echo "Verified non-empty files:"
+
+          for file in "${required_non_empty_files[@]}"; do
+            size="$(du -h "$file" | cut -f1)"
+            echo "- ${file}: ${size}"
+          done
+
+          echo
+          echo "Verified marker files:"
+
+          for file in "${required_existing_files[@]}"; do
+            echo "- ${file}: exists and may be empty"
+          done
 
       - name: Upload GitHub Pages artifact
         id: pages-artifact
