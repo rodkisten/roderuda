@@ -83,9 +83,9 @@ const cssAsString = () => ({
   async load(id) {
     if (!id.startsWith(cssModulePrefix)) return null
     const filePath = cssModules.get(id)
-    if (filePath.includes('luna-dom-highlighter')) {
-      return `export default ${JSON.stringify(readFileSync(filePath, 'utf8'))};`
-    }
+   // if (filePath.includes('luna-dom-highlighter')) {
+   //   return `export default ${JSON.stringify(readFileSync(filePath, 'utf8'))};`
+   //  }
     const result = await postcss(postcssPlugins).process(
       readFileSync(filePath, 'utf8'),
       { from: filePath }
