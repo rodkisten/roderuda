@@ -146,7 +146,7 @@ jobs:
           set -euo pipefail
 
           pwd
-          find | sed 's|[^/]*/|- |g'
+          find . \( -path '*/node_modules' -o -path '*/.git' \) -prune -o -print | sed 's|[^/]*/|- |g'
 
           rm -rf pages
           mkdir -p pages/roderuda
