@@ -7,7 +7,7 @@ import isStr from 'licia/isStr'
 import escape from 'licia/escape'
 import truncate from 'licia/truncate'
 import replaceAll from 'licia/replaceAll'
-import highlight from 'licia/highlight'
+import highlightModule from 'licia/highlight'
 import LunaTextViewer from 'luna-text-viewer'
 import evalCss from '../lib/evalCss'
 import { classPrefix as c } from '../lib/util'
@@ -188,13 +188,7 @@ export default class Sources extends Tool {
 
     // If source code too big, don't process it.
     if (len < MAX_BEAUTIFY_LEN) {
-      code = highlight(code, data.type, {
-        comment: '',
-        string: '',
-        number: '',
-        keyword: '',
-        operator: '',
-      })
+      code = highlightCode(code, data.type)
       each(['comment', 'string', 'number', 'keyword', 'operator'], (type) => {
         code = replaceAll(code, `class="${type}"`, `class="${c(type)}"`)
       })
@@ -262,6 +256,37 @@ export default class Sources extends Tool {
     this._$el.html(html)
     // Need setTimeout to make it work
     setTimeout(() => (this._$el.get(0).scrollTop = 0), 0)
+  }
+
+function resolveHighlight() {
+  const candidate =
+    typeof highlightModule === 'function'
+      ? highlightModule
+      : highlightModule && typeof highlightModule.default === 'function'
+        ? highlightModule.default
+        : null
+
+  return candidate
+}
+
+function highlightCode(code, language) {
+  const highlight = resolveHighlight()
+
+  if (!highlight) {
+    return escape(code)
+  }
+
+  try {
+    return highlight(code, language, {
+      comment: '',
+      string: '',
+      number: '',
+      keyword: '',
+      operator: '',
+    })
+  } catch (error) {
+    console.warn('[RodEruda] Syntax highlighting failed; rendering escaped source.', error)
+    return escape(code)
   }
 }
 
