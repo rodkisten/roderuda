@@ -97,6 +97,7 @@ jobs:
             "dist/roderuda.js"
             "dist/roderuda.min.js"
             "dist/roderuda.with-comments.js"
+            "dist-vite/roderuda.js"
           )
 
           for file in "${required_files[@]}"; do
@@ -156,6 +157,7 @@ jobs:
             dist/roderuda.min.js \
             dist/roderuda.with-comments.js \
             dist/build.json \
+            index.html \
             pages/roderuda/
 
           optional_files=(
@@ -173,9 +175,6 @@ jobs:
           # This file must exist, but it is intentionally empty.
           touch pages/.nojekyll
         
-          
-           
-          cp index.html pages/roderuda/index.html
 
       - name: Verify GitHub Pages directory
         shell: bash
