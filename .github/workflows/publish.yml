@@ -145,6 +145,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          pwd
+          find | sed 's|[^/]*/|- |g'
+
           rm -rf pages
           mkdir -p pages/roderuda
 
@@ -153,7 +156,6 @@ jobs:
             dist/roderuda.min.js \
             dist/roderuda.with-comments.js \
             dist/build.json \
-            dist/index.html \
             pages/roderuda/
 
           optional_files=(
@@ -171,8 +173,7 @@ jobs:
           # This file must exist, but it is intentionally empty.
           touch pages/.nojekyll
         
-          pwd
-          find | sed 's|[^/]*/|- |g'
+          
            
           cp index.html pages/roderuda/index.html
 
