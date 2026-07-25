@@ -24,7 +24,7 @@ export default class Network extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Network.scss'))
+    this._style = evalCss(require('./Network.css'))
 
     this.name = 'network'
     this._requests = {}

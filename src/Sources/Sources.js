@@ -16,7 +16,7 @@ export default class Sources extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Sources.scss'))
+    this._style = evalCss(require('./Sources.css'))
 
     this.name = 'sources'
     this._showLineNum = true

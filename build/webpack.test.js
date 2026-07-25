@@ -49,26 +49,6 @@ module.exports = {
         ],
       },
       {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'css-loader',
-            options: { esModule: false },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [
-                require('postcss-prefixer')({ prefix: '_', ignore: [/luna-.*/] }),
-                require('autoprefixer'),
-                require('postcss-clean')(),
-              ],
-            },
-          },
-          { loader: 'sass-loader', options: { api: 'modern' } },
-        ],
-      },
-      {
         test: /\.css$/,
         exclude: /luna-dom-highlighter/,
         use: [

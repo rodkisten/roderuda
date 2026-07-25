@@ -12,7 +12,7 @@ export default class Snippets extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Snippets.scss'))
+    this._style = evalCss(require('./Snippets.css'))
 
     this.name = 'snippets'
 

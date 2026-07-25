@@ -1,17 +1,43 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #network {
   .network {
-    @include absolute();
+    position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
     padding-top: 39px;
   }
   .control {
     padding: 10px;
     border-bottom: none;
-    @include control();
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    left: 0;
+    top: 0;
+    cursor: default;
+    font-size: 0;
+    background: var(--darker-background);
+    color: var(--primary);
+    line-height: 20px;
+    border-bottom: 1px solid var(--border);
+    [class^='roderuda-icon-'],
+    [class*=' roderuda-icon-'] {
+      display: inline-block;
+      padding: 10px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &:active,
+      &.active {
+        color: var(--accent);
+      }
+    }
     .title {
-      font-size: $font-size;
+      font-size: var(--roderuda-font-size, 14px);
     }
     .icon-clear {
       left: 23px;
@@ -32,7 +58,7 @@
       max-width: 80px;
       overflow: hidden;
       right: 88px;
-      font-size: $font-size;
+      font-size: var(--roderuda-font-size, 14px);
       text-overflow: ellipsis;
     }
     .icon-record {
@@ -58,7 +84,11 @@
     border-right: none;
   }
   .detail {
-    @include absolute();
+    position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
     z-index: 10;
     display: none;
     padding-top: 40px;
@@ -67,7 +97,7 @@
       padding: 10px 35px;
       border-bottom: 1px solid var(--border);
       .url {
-        font-size: $font-size-s;
+        font-size: var(--roderuda-font-size-s, 12px);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -86,7 +116,8 @@
       }
     }
     .http {
-      @include overflow-auto(y);
+      overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
       height: 100%;
       .section {
         border-top: 1px solid var(--border);
@@ -96,9 +127,9 @@
         h2 {
           background: var(--darker-background);
           color: var(--primary);
-          padding: $padding;
+          padding: var(--roderuda-padding, 10px);
           line-height: 18px;
-          font-size: $font-size;
+          font-size: var(--roderuda-font-size, 14px);
         }
         table {
           color: var(--foreground);
@@ -106,7 +137,7 @@
             user-select: text;
           }
           td {
-            font-size: $font-size-s;
+            font-size: var(--roderuda-font-size-s, 12px);
             padding: 5px 10px;
             word-break: break-all;
           }
@@ -120,9 +151,10 @@
       .response,
       .data {
         user-select: text;
-        @include overflow-auto(x);
-        padding: $padding;
-        font-size: $font-size-s;
+        overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+        padding: var(--roderuda-padding, 10px);
+        font-size: var(--roderuda-font-size-s, 12px);
         margin: 10px 0;
         white-space: pre-wrap;
         border-top: 1px solid var(--border);
@@ -135,7 +167,7 @@
 
 .safe-area #network {
   .http {
-    @include safe-area(padding-bottom, 0px);
+    padding-bottom: calc(0px + env(safe-area-inset-bottom));
   }
 }
 

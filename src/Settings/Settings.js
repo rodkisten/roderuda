@@ -14,7 +14,7 @@ export default class Settings extends Tool {
   constructor() {
     super()
 
-    this._style = evalCss(require('./Settings.scss'))
+    this._style = evalCss(require('./Settings.css'))
 
     this.name = 'settings'
     this._settings = []

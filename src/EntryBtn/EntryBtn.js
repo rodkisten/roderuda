@@ -14,7 +14,7 @@ export default class EntryBtn extends Emitter {
   constructor($container) {
     super()
 
-    this._style = evalCss(require('./EntryBtn.scss'))
+    this._style = evalCss(require('./EntryBtn.css'))
 
     this._$container = $container
     this._initTpl()

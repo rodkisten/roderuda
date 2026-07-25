@@ -1,8 +1,7 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #resources {
-  @include overflow-auto(y);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 10px;
   font-size: 14px;
   .section {
@@ -34,14 +33,40 @@
     }
   }
   .title {
-    padding: $padding;
+    padding: var(--roderuda-padding, 10px);
     line-height: 18px;
     color: var(--primary);
     background: var(--darker-background);
-    @include right-btn();
+    .btn {
+      margin-left: 5px;
+      float: right;
+      color: var(--primary);
+      width: 18px;
+      height: 18px;
+      font-size: var(--roderuda-font-size-l, 16px);
+      font-weight: normal;
+      cursor: pointer;
+      transition: color var(--roderuda-anim-duration, 0.3s);
+      &.filter-text {
+        width: auto;
+        max-width: 80px;
+        font-size: var(--roderuda-font-size, 14px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+      }
+      &:active { color: var(--accent); }
+      &.btn-disabled {
+        color: inherit !important;
+        cursor: default !important;
+        pointer-events: none;
+        opacity: 0.5;
+        * { pointer-events: none; }
+      }
+    }
   }
   .link-list {
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     color: var(--foreground);
     li {
       padding: 10px;
@@ -53,11 +78,11 @@
   }
   .image-list {
     color: var(--foreground);
-    font-size: $font-size-s;
+    font-size: var(--roderuda-font-size-s, 12px);
     display: flex;
     flex-wrap: wrap;
-    padding-left: $padding;
-    padding-top: $padding;
+    padding-left: var(--roderuda-padding, 10px);
+    padding-top: var(--roderuda-padding, 10px);
     &::after {
       content: '';
       flex-grow: 1000;
@@ -66,8 +91,8 @@
       flex-grow: 1;
       cursor: pointer;
       overflow-y: hidden;
-      margin-right: $padding;
-      margin-bottom: $padding;
+      margin-right: var(--roderuda-padding, 10px);
+      margin-bottom: var(--roderuda-padding, 10px);
       border: 1px solid var(--border);
       &.image {
         height: 100px;
@@ -83,5 +108,5 @@
 }
 
 .safe-area #resources {
-  @include safe-area(padding-bottom, 10px);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }

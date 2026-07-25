@@ -2,7 +2,6 @@
 // RodEruda build config – replaces webpack
 const { defineConfig } = require('tsdown')
 const replace = require('@rollup/plugin-replace')
-const sass = require('sass')
 const postcss = require('postcss')
 const autoprefixer = require('autoprefixer')
 const { readFileSync } = require('fs')
@@ -14,6 +13,44 @@ const pkg = require('./package.json')
 // Luna component classes (luna-*) are left untouched.
 const SELECTOR_RE = /\.(-?[a-zA-Z_][a-zA-Z0-9_-]*)/g
 
+
+const nesting = {
+  postcssPlugin: 'inline-nesting',
+  OnceExit(root, { Rule }) {
+    let changed = true
+    while (changed) {
+      changed = false
+      const nestedRules = []
+      root.walkRules((rule) => {
+        const parent = rule.parent
+        if (parent && parent.type === 'rule') nestedRules.push(rule)
+      })
+      for (const rule of nestedRules) {
+        const parent = rule.parent
+        if (!parent || parent.type !== 'rule' || !parent.parent) continue
+        const parentSelectors = parent.selectors || parent.selector.split(',')
+        const childSelectors = rule.selectors || rule.selector.split(',')
+        const selectors = []
+        for (const parentSelector of parentSelectors) {
+          for (const childSelector of childSelectors) {
+            const child = childSelector.trim()
+            selectors.push(
+              child.includes('&')
+                ? child.replace(/&/g, parentSelector.trim())
+                : `${parentSelector.trim()} ${child}`
+            )
+          }
+        }
+        const flattened = new Rule({ selector: selectors.join(', ') })
+        flattened.append(rule.nodes.map((node) => node.clone()))
+        parent.after(flattened)
+        rule.remove()
+        changed = true
+      }
+    }
+  },
+}
+
 const inlinePrefixer = {
   postcssPlugin: 'inline-prefix',
   Rule(rule) {
@@ -24,7 +61,7 @@ const inlinePrefixer = {
   },
 }
 
-const postcssPlugins = [inlinePrefixer, autoprefixer()]
+const postcssPlugins = [nesting, inlinePrefixer, autoprefixer()]
 
 /**
  * Process raw CSS through the PostCSS pipeline.
@@ -41,20 +78,15 @@ async function processCssContent(cssContent, filePath) {
 }
 
 /**
- * Rolldown plugin — intercepts .scss and .css imports via the `load` hook
+ * Rolldown plugin — intercepts .css imports via the `load` hook
  * (before rolldown tries its own module-type handling) and returns a JS
  * string module.  We also register the `load` hook with `filter` so that
  * rolldown never attempts to natively parse those extensions.
  */
-function scssPlugin() {
+function cssStringPlugin() {
   return {
-    name: 'roderuda-scss-plugin',
+    name: 'roderuda-css-string-plugin',
     async load(id) {
-      if (id.endsWith('.scss')) {
-        const sassResult = sass.compile(id, { style: 'expanded' })
-        const css = await processCssContent(sassResult.css, id)
-        return { code: `export default ${JSON.stringify(css)};`, map: null }
-      }
       if (id.endsWith('.css') && !id.includes('.css.map')) {
         const rawCss = readFileSync(id, 'utf8')
         const css = await processCssContent(rawCss, id)
@@ -64,9 +96,9 @@ function scssPlugin() {
   }
 }
 
-// Tell rolldown to treat CSS/SCSS as JS so it doesn't reject them before
+// Tell rolldown to treat CSS as JS so it doesn't reject them before
 // handing control to our plugin.
-const cssLoader = { '.css': 'js', '.scss': 'js' }
+const cssLoader = { '.css': 'js' }
 
 const banner = `/*! ${pkg.name} v${pkg.version} | MIT License | https://github.com/oirodolfo/eruda-console-browser */`
 
@@ -77,11 +109,12 @@ function makeReplace(envValue) {
     values: {
       VERSION: JSON.stringify(pkg.version),
       ENV: JSON.stringify(envValue),
+      BUILD_INFO: JSON.stringify(''),
     },
   })
 }
 
-const basePlugins = [scssPlugin()]
+const basePlugins = [cssStringPlugin()]
 
 module.exports = defineConfig([
   // ── Non-minified: dist/roderuda.js ──────────────────────────────────────

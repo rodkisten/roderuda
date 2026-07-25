@@ -1,14 +1,13 @@
-@use '../style/variable' as *;
-@use '../style/mixin' as *;
 
 #info {
-  @include overflow-auto(y);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   li {
     margin: 10px;
     border: 1px solid var(--border);
     .title,
     .content {
-      padding: $padding;
+      padding: var(--roderuda-padding, 10px);
     }
     .title {
       position: relative;
@@ -20,7 +19,7 @@
         top: 14px;
         color: var(--primary);
         cursor: pointer;
-        transition: color $anim-duration;
+        transition: color var(--roderuda-anim-duration, 0.3s);
         &:active {
           color: var(--accent);
         }
@@ -30,7 +29,7 @@
       margin: 0;
       user-select: text;
       color: var(--foreground);
-      font-size: $font-size-s;
+      font-size: var(--roderuda-font-size-s, 12px);
       word-break: break-all;
       table {
         width: 100%;
@@ -56,5 +55,5 @@
 }
 
 .safe-area #info {
-  @include safe-area(padding-bottom, 10px);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
